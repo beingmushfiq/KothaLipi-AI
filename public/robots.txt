@@ -38,4 +38,4 @@ User-agent: cohere-ai
 Allow: /
 
 # Sitemap Index Reference
-Sitemap: https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/sitemap.xml
+Sitemap: https://kothalipi.devcenterpoint.com/sitemap.xml

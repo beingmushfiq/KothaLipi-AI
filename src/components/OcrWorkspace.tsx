@@ -25,7 +25,10 @@ import { SAMPLE_DOCUMENTS, getSampleDocImage } from '../data/samples';
 import { motion, AnimatePresence } from 'motion/react';
 import gsap from 'gsap';
 import { useLanguage } from '../context/LanguageContext';
+import { useEngine } from '../context/EngineContext';
 import { CopyButton } from './CopyButton';
+import { requestAi, AiUnavailableError } from '../utils/aiClient';
+import { deviceOcr, deviceSpeak } from '../utils/deviceAi';
 
 interface OcrWorkspaceProps {
   onSendToWriter: (text: string) => void;
@@ -37,6 +40,7 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
   onSaveHistory,
 }) => {
   const { t, language } = useLanguage();
+  const { cloudUnavailable, reportCloudFailure, reportCloudSuccess } = useEngine();
 
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [selectedDocId, setSelectedDocId] = useState<string>('sample-circular');
@@ -44,6 +48,7 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [ocrResult, setOcrResult] = useState<OcrResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [usingDeviceEngine, setUsingDeviceEngine] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -114,39 +119,52 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
     setError(null);
     setAudioUrl(null);
 
-    try {
-      const mimeType = selectedImage.startsWith('data:image/png')
-        ? 'image/png'
-        : 'image/jpeg';
+    const mimeType = selectedImage.startsWith('data:image/png')
+      ? 'image/png'
+      : 'image/jpeg';
 
-      const response = await fetch('/api/ocr', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+    const finish = (data: OcrResult, titleFallback: string) => {
+      setOcrResult(data);
+      const title = data.documentType || titleFallback;
+      onSaveHistory(title, (data.fullExtractedText || '').slice(0, 120), data);
+    };
+
+    const titleFallback = selectedDocId
+      ? SAMPLE_DOCUMENTS.find((d) => d.id === selectedDocId)?.title || 'Bangla Document OCR'
+      : 'Uploaded Document';
+
+    // Tier 1: Cloud AI (skipped entirely when we already know it is unavailable)
+    if (!cloudUnavailable) {
+      try {
+        const data = await requestAi<OcrResult>('/api/ocr', {
           imageBase64: selectedImage,
           mimeType,
           mode: ocrMode,
-        }),
-      });
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error || `Server error: ${response.status}`);
+        });
+        reportCloudSuccess();
+        setUsingDeviceEngine(false);
+        finish(data, titleFallback);
+        return;
+      } catch (err) {
+        reportCloudFailure(err);
+        // Only fall through to the on-device engine for availability failures.
+        if (!(err instanceof AiUnavailableError) || !err.canDegrade) {
+          const message = err instanceof Error ? err.message : 'An unexpected error occurred';
+          setError(`${t.ocrErrorPrefix} ${message}`);
+          setIsLoading(false);
+          return;
+        }
       }
+    }
 
-      const data: OcrResult = await response.json();
-      setOcrResult(data);
-
-      const title =
-        data.documentType ||
-        (selectedDocId
-          ? SAMPLE_DOCUMENTS.find((d) => d.id === selectedDocId)?.title || 'Bangla Document OCR'
-          : 'Uploaded Document');
-      const preview = (data.fullExtractedText || '').slice(0, 120);
-      onSaveHistory(title, preview, data);
-    } catch (err: unknown) {
-      console.error('OCR Error:', err);
-      const message = err instanceof Error ? err.message : 'An unexpected error occurred';
+    // Tier 2: On-device OCR (Tesseract.js) — free, no API key, lower accuracy
+    try {
+      setUsingDeviceEngine(true);
+      const data = await deviceOcr(selectedImage, ocrMode);
+      finish(data, titleFallback);
+    } catch (err) {
+      console.error('On-device OCR Error:', err);
+      const message = err instanceof Error ? err.message : 'On-device OCR failed';
       setError(`${t.ocrErrorPrefix} ${message}`);
     } finally {
       setIsLoading(false);
@@ -189,34 +207,26 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
 
     try {
       setIsPlayingAudio(true);
-      const res = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: ocrResult.fullExtractedText.slice(0, 400),
-        }),
+      const ttsData = await requestAi<{ audioBase64?: string; mimeType?: string }>('/api/tts', {
+        text: ocrResult.fullExtractedText.slice(0, 400),
       });
 
-      if (!res.ok) throw new Error('TTS failed');
-
-      const ttsData = await res.json();
       if (ttsData.audioBase64) {
-        const audioSrc = `data:${ttsData.mimeType};base64,${ttsData.audioBase64}`;
+        const audioSrc = `data:${ttsData.mimeType || 'audio/wav'};base64,${ttsData.audioBase64}`;
         setAudioUrl(audioSrc);
         const audio = new Audio(audioSrc);
         audioRef.current = audio;
         audio.onended = () => setIsPlayingAudio(false);
         audio.play();
-      }
-    } catch {
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(
-          ocrResult.fullExtractedText.slice(0, 300)
-        );
-        utterance.lang = 'bn-BD';
-        utterance.onend = () => setIsPlayingAudio(false);
-        window.speechSynthesis.speak(utterance);
       } else {
+        throw new AiUnavailableError('UPSTREAM_ERROR', 'No audio returned');
+      }
+    } catch (err) {
+      reportCloudFailure(err);
+      // On-device speech synthesis fallback (no key, no network)
+      try {
+        await deviceSpeak(ocrResult.fullExtractedText.slice(0, 600));
+      } finally {
         setIsPlayingAudio(false);
       }
     }
@@ -471,6 +481,11 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
               {ocrResult?.confidenceScore && (
                 <span className="text-[11px] tabular-nums font-mono text-teal-800 bg-teal-50 border border-teal-200 dark:text-teal-300 dark:bg-teal-950/40 dark:border-teal-800/40 px-2 py-0.5 rounded-md font-semibold">
                   {ocrResult.confidenceScore}% {t.ocrAccuracy}
+                </span>
+              )}
+              {usingDeviceEngine && ocrResult && (
+                <span className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 dark:text-amber-300 dark:bg-amber-950/40 dark:border-amber-800/40 px-2 py-0.5 rounded-md font-semibold">
+                  {language === 'en' ? 'On-device' : 'অন-ডিভাইস'}
                 </span>
               )}
             </div>

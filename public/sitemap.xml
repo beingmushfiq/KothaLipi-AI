@@ -2,59 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <!-- Primary Homepage & KothaLipi Studio Hub -->
+  <!-- KothaLipi (কথালিপি) - Bangla AI Toolkit -->
+  <!-- Single-page application: workspaces (OCR / Writing / Voice / History) are
+       client-side hash views of this one URL and are not separately indexable. -->
   <url>
-    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/</loc>
-    <lastmod>2026-10-03</lastmod>
-    <changefreq>daily</changefreq>
+    <loc>https://kothalipi.devcenterpoint.com/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/?lang=bn" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://kothalipi.devcenterpoint.com/?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://kothalipi.devcenterpoint.com/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kothalipi.devcenterpoint.com/" />
     <image:image>
-      <image:loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/logo.svg</image:loc>
+      <image:loc>https://kothalipi.devcenterpoint.com/logo.svg</image:loc>
       <image:title>KothaLipi (কথালিপি) Logo</image:title>
       <image:caption>KothaLipi – The Bengali Voice, Vision &amp; Writing Engine</image:caption>
     </image:image>
-  </url>
-
-  <!-- Workspace 1: Vision OCR (নথি পাঠ) -->
-  <url>
-    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#ocr</loc>
-    <lastmod>2026-10-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#ocr" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#ocr" />
-  </url>
-
-  <!-- Workspace 2: Writing Studio (শুদ্ধ লেখনী) -->
-  <url>
-    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#writer</loc>
-    <lastmod>2026-10-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#writer" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#writer" />
-  </url>
-
-  <!-- Workspace 3: Voice to Text (কণ্ঠস্বর) -->
-  <url>
-    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#voice</loc>
-    <lastmod>2026-10-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#voice" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#voice" />
-  </url>
-
-  <!-- Workspace 4: History Archive (হিস্ট্রি) -->
-  <url>
-    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#history</loc>
-    <lastmod>2026-10-03</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#history" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#history" />
+    <image:image>
+      <image:loc>https://kothalipi.devcenterpoint.com/pwa-512x512.png</image:loc>
+      <image:title>KothaLipi Bangla AI Toolkit</image:title>
+      <image:caption>Bangla OCR, proofreading and voice-to-text AI suite</image:caption>
+    </image:image>
   </url>
 </urlset>

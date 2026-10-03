@@ -25,7 +25,7 @@
 **An Initiative Engineered & Supported by [DevCenterPoint](https://devcenterpoint.com)**  
 *CODE. BUILD. DEPLOY. SCALE.*
 
-[Live Applet](https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app) • [DevCenterPoint Website](https://devcenterpoint.com) • [Report Issue](https://devcenterpoint.com/contact)
+[Live Applet](https://kothalipi.devcenterpoint.com) • [DevCenterPoint Website](https://devcenterpoint.com) • [Report Issue](https://devcenterpoint.com/contact)
 
 ---
 

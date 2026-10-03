@@ -22,6 +22,13 @@ import gsap from 'gsap';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { CopyButton } from './CopyButton';
+import { useEngine } from '../context/EngineContext';
+import { requestAi, AiUnavailableError } from '../utils/aiClient';
+import {
+  createDeviceTranscriber,
+  isWebSpeechSupported,
+  deviceTranscriptionResult,
+} from '../utils/deviceAi';
 
 interface VoiceWorkspaceProps {
   onSendToWriter: (text: string) => void;
@@ -34,6 +41,7 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
 }) => {
   const { theme } = useTheme();
   const { t, language } = useLanguage();
+  const { cloudUnavailable, reportCloudFailure, reportCloudSuccess } = useEngine();
   const isDark = theme === 'dark';
 
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -47,6 +55,9 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [result, setResult] = useState<TranscriptionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [usingDeviceEngine, setUsingDeviceEngine] = useState<boolean>(false);
+  const [liveTranscript, setLiveTranscript] = useState<string>('');
+  const [isDictating, setIsDictating] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
@@ -57,6 +68,7 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
   const timerRef = useRef<number | null>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const recognitionRef = useRef<ReturnType<typeof createDeviceTranscriber>>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
@@ -67,6 +79,7 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      recognitionRef.current?.stop();
     };
   }, []);
 
@@ -80,9 +93,89 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
     }
   }, [result]);
 
+  const startLiveDictation = () => {
+    const recognition = createDeviceTranscriber({
+      onPartial: (text) => setLiveTranscript(text),
+      onFinal: (text) => {
+        setLiveTranscript(text);
+        if (text.trim()) {
+          const data = deviceTranscriptionResult(text.trim());
+          setResult(data);
+          setUsingDeviceEngine(true);
+          onSaveHistory(
+            data.detectedDialect || (language === 'en' ? 'Bangla Voice Transcript' : 'বাংলা ভয়েস ট্রান্সক্রিপ্ট'),
+            text.trim().slice(0, 100),
+            data
+          );
+        }
+      },
+      onError: () => {
+        setError(
+          language === 'en'
+            ? 'On-device dictation stopped unexpectedly. Please try again.'
+            : 'অন-ডিভাইস ডিকটেশন অপ্রত্যাশিতভাবে বন্ধ হয়েছে। আবার চেষ্টা করুন।'
+        );
+      },
+    });
+
+    if (!recognition) {
+      setError(
+        language === 'en'
+          ? 'On-device transcription needs a browser with the Web Speech API (Chrome or Edge).'
+          : 'অন-ডিভাইস ট্রান্সক্রিপশনের জন্য Web Speech API সমর্থিত ব্রাউজার (Chrome বা Edge) প্রয়োজন।'
+      );
+      return;
+    }
+
+    recognitionRef.current = recognition;
+    setLiveTranscript('');
+    setIsDictating(true);
+    setRecordingDuration(0);
+    try {
+      recognition.start();
+      timerRef.current = window.setInterval(() => {
+        setRecordingDuration((prev) => prev + 1);
+      }, 1000);
+    } catch (err) {
+      console.error('Failed to start on-device dictation:', err);
+      setIsDictating(false);
+      setError(
+        language === 'en'
+          ? 'Could not start on-device dictation.'
+          : 'অন-ডিভাইস ডিকটেশন শুরু করা যায়নি।'
+      );
+    }
+  };
+
+  const stopLiveDictation = () => {
+    recognitionRef.current?.stop();
+    recognitionRef.current = null;
+    setIsDictating(false);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
   const startRecording = async () => {
     setError(null);
     setResult(null);
+
+    // On-device mode: use live browser dictation instead of capturing audio
+    // for the cloud, since the Web Speech API only works with a live mic.
+    if (cloudUnavailable && isWebSpeechSupported()) {
+      startLiveDictation();
+      return;
+    }
+
+    if (cloudUnavailable && !isWebSpeechSupported()) {
+      setError(
+        language === 'en'
+          ? 'On-device transcription needs a browser with the Web Speech API (Chrome or Edge). Please upload an audio file once cloud quota resets.'
+          : 'অন-ডিভাইস ট্রান্সক্রিপশনের জন্য Web Speech API সমর্থিত ব্রাউজার (Chrome বা Edge) প্রয়োজন। ক্লাউড কোটা রিসেট হলে অডিও ফাইল আপলোড করুন।'
+      );
+      return;
+    }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -140,6 +233,10 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
   };
 
   const stopRecording = () => {
+    if (isDictating) {
+      stopLiveDictation();
+      return;
+    }
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
@@ -196,6 +293,14 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
     reader.readAsDataURL(file);
   };
 
+  const finishTranscription = (data: TranscriptionResult, device: boolean) => {
+    setResult(data);
+    setUsingDeviceEngine(device);
+    const title = data.detectedDialect || (language === 'en' ? 'Bangla Voice Transcript' : 'বাংলা ভয়েস ট্রান্সক্রিপ্ট');
+    const preview = (data.fullTranscript || '').slice(0, 100);
+    onSaveHistory(title, preview, data);
+  };
+
   const runTranscription = async () => {
     if (!audioBase64) {
       setError(language === 'en' ? 'Please record speech or upload an audio file first.' : 'অনুগ্রহ করে আগে কণ্ঠ রেকর্ড করুন অথবা অডিও ফাইল যুক্ত করুন।');
@@ -205,38 +310,44 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
     setIsLoading(true);
     setError(null);
 
-    try {
-      const response = await fetch('/api/transcribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+    // Tier 1: Cloud AI (skipped when we already know the cloud is unavailable).
+    if (!cloudUnavailable) {
+      try {
+        const data = await requestAi<TranscriptionResult>('/api/transcribe', {
           audioBase64,
           mimeType: audioMimeType,
           dialectNormalization,
           speakerDiarization,
-        }),
-      });
-
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(err.error || `Server error: ${response.status}`);
+        });
+        reportCloudSuccess();
+        finishTranscription(data, false);
+        setIsLoading(false);
+        return;
+      } catch (err) {
+        reportCloudFailure(err);
+        if (!(err instanceof AiUnavailableError) || !err.canDegrade) {
+          console.error('Transcription error:', err);
+          const msg = err instanceof Error ? err.message : 'An unexpected error occurred';
+          setError(`${language === 'en' ? 'Transcription failed:' : 'ভয়েস ট্রান্সক্রিপশন ব্যর্থ হয়েছে:'} ${msg}`);
+          setIsLoading(false);
+          return;
+        }
       }
-
-      const data: TranscriptionResult = await response.json();
-      setResult(data);
-
-      const title = data.detectedDialect || (language === 'en' ? 'Bangla Voice Transcript' : 'বাংলা ভয়েস ট্রান্সক্রিপ্ট');
-      const preview = (data.fullTranscript || '').slice(0, 100);
-      onSaveHistory(title, preview, data);
-    } catch (err: unknown) {
-      console.error('Transcription error:', err);
-      const msg = err instanceof Error ? err.message : 'An unexpected error occurred';
-      setError(`${language === 'en' ? 'Transcription failed:' : 'ভয়েস ট্রান্সক্রিপশন ব্যর্থ হয়েছে:'} ${msg}`);
-    } finally {
-      setIsLoading(false);
     }
-  };
 
+    // Tier 2: On-device. The Web Speech API can only read a live mic, so an
+    // uploaded or recorded file cannot be replayed through it. Guide the user.
+    setIsLoading(false);
+    setError(
+      isWebSpeechSupported()
+        ? language === 'en'
+          ? 'On-device mode can only transcribe live microphone input, not an uploaded file. Tap the mic button and dictate instead.'
+          : 'অন-ডিভাইস মোডে কেবল লাইভ মাইক্রোফোন বক্তব্য ট্রান্সক্রিপ্ট করা যায়, আপলোড করা ফাইল নয়। মাইক বাটনে চাপ দিয়ে বলুন।'
+        : language === 'en'
+          ? 'On-device transcription needs a browser with the Web Speech API (Chrome or Edge). Please upload an audio file once cloud quota resets.'
+          : 'অন-ডিভাইস ট্রান্সক্রিপশনের জন্য Web Speech API সমর্থিত ব্রাউজার (Chrome বা Edge) প্রয়োজন। ক্লাউড কোটা রিসেট হলে অডিও ফাইল আপলোড করুন।'
+    );
+  };
   const toggleAudioPlayback = () => {
     if (!audioPlayerRef.current) return;
     if (isPlayingAudio) {
@@ -305,7 +416,7 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
           <div className="flex items-center gap-2.5 flex-wrap w-full sm:w-auto">
             <button
               onClick={runTranscription}
-              disabled={isLoading || !audioBase64 || isRecording}
+              disabled={isLoading || !audioBase64 || isRecording || isDictating}
               className="w-full sm:w-auto justify-center flex items-center gap-2 px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white dark:bg-gradient-to-r dark:from-teal-500 dark:to-emerald-600 dark:hover:from-teal-400 dark:hover:to-emerald-500 disabled:opacity-40 dark:text-neutral-950 font-semibold text-xs sm:text-sm rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               {isLoading ? (
@@ -416,10 +527,14 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
                 {formatSeconds(recordingDuration)}
               </div>
               <div className="text-xs text-stone-500 dark:text-neutral-500 mt-1">
-                {isRecording ? (
+                {isRecording || isDictating ? (
                   <span className="text-rose-700 dark:text-rose-400 flex items-center justify-center gap-2 font-semibold">
                     <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-pulse"></span>
-                    {t.voiceRecordingActive}
+                    {isDictating
+                      ? language === 'en'
+                        ? 'On-device dictation active — speak now'
+                        : 'অন-ডিভাইস ডিকটেশন সক্রিয় — বলুন'
+                      : t.voiceRecordingActive}
                   </span>
                 ) : audioBlobUrl ? (
                   <span className="text-teal-700 dark:text-teal-400 font-semibold">{t.voiceAudioReady}</span>
@@ -427,11 +542,18 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
                   t.voiceRecordPrompt
                 )}
               </div>
+
+              {/* Live on-device transcript preview */}
+              {isDictating && liveTranscript && (
+                <div className="mt-3 max-w-md mx-auto p-3 rounded-xl bg-white dark:bg-black/40 border border-stone-200/90 dark:border-white/[0.06] text-left text-sm font-bangla text-stone-800 dark:text-neutral-200 leading-relaxed">
+                  {liveTranscript}
+                </div>
+              )}
             </div>
 
             {/* Recording Controls */}
             <div className="flex items-center gap-4">
-              {!isRecording ? (
+              {!isRecording && !isDictating ? (
                 <button
                   onClick={startRecording}
                   className="w-16 h-16 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center shadow-lg shadow-rose-900/20 dark:shadow-red-950/60 transition-all hover:scale-105 active:scale-95"
@@ -511,6 +633,11 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
               {result?.detectedDialect && (
                 <span className="text-[11px] text-teal-800 bg-teal-50 border border-teal-200 dark:text-teal-300 dark:bg-teal-950/40 dark:border-teal-800/40 px-2 py-0.5 rounded-md font-semibold">
                   {result.detectedDialect}
+                </span>
+              )}
+              {usingDeviceEngine && (
+                <span className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 dark:text-amber-300 dark:bg-amber-950/40 dark:border-amber-800/40 px-2 py-0.5 rounded-md font-semibold">
+                  {language === 'en' ? 'On-device' : 'অন-ডিভাইস'}
                 </span>
               )}
             </div>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { EngineProvider } from './context/EngineContext';
+import { EngineStatusBanner } from './components/EngineStatusBanner';
 import { Navbar } from './components/Navbar';
 import { OcrWorkspace } from './components/OcrWorkspace';
 import { WritingAssistant } from './components/WritingAssistant';
@@ -212,6 +214,9 @@ function AppContent() {
 
       {/* Main Viewport Container with Mobile Bottom Nav Padding */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-28 md:pb-12">
+        {/* Cloud ⇄ On-device engine status */}
+        <EngineStatusBanner />
+
         {/* Floating Toast Notification */}
         <AnimatePresence>
           {toastMessage && (
@@ -298,7 +303,9 @@ export default function App() {
     <ThemeProvider>
       <LanguageProvider>
         <AuthProvider>
-          <AppContent />
+          <EngineProvider>
+            <AppContent />
+          </EngineProvider>
         </AuthProvider>
       </LanguageProvider>
     </ThemeProvider>

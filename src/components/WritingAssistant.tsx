@@ -50,39 +50,15 @@ import { ToneSelector } from './ToneSelector';
 import { motion, AnimatePresence } from 'motion/react';
 import gsap from 'gsap';
 import { useLanguage } from '../context/LanguageContext';
+import { useEngine } from '../context/EngineContext';
 import { CopyButton } from './CopyButton';
 import { TypingOutputDisplay } from './TypingOutputDisplay';
+import { requestAi } from '../utils/aiClient';
+import { deviceSpeak } from '../utils/deviceAi';
 
 interface WritingAssistantProps {
   initialText?: string;
   onSaveHistory: (title: string, preview: string, data: ProofreadResult) => void;
-}
-
-async function fetchWithRetry(
-  url: string,
-  options: RequestInit,
-  retries = 2,
-  delay = 500
-): Promise<Response> {
-  let lastErr: unknown;
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 25000);
-      const res = await fetch(url, {
-        ...options,
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      return res;
-    } catch (err: unknown) {
-      lastErr = err;
-      if (attempt < retries) {
-        await new Promise((r) => setTimeout(r, delay));
-      }
-    }
-  }
-  throw lastErr || new Error('Network request failed');
 }
 
 export const WritingAssistant: React.FC<WritingAssistantProps> = ({
@@ -90,6 +66,7 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
   onSaveHistory,
 }) => {
   const { t, language } = useLanguage();
+  const { reportCloudFailure, reportCloudSuccess } = useEngine();
 
   const [inputText, setInputText] = useState<string>(
     initialText || SAMPLE_WRITINGS[0].text
@@ -104,12 +81,14 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
   const [isExportMenuOpen, setIsExportMenuOpen] = useState<boolean>(false);
   const [exportFeedback, setExportFeedback] = useState<string | null>(null);
+  const [usingDeviceEngine, setUsingDeviceEngine] = useState<boolean>(false);
 
   // Summarize Side-Panel State
   const [isSummaryOpen, setIsSummaryOpen] = useState<boolean>(false);
   const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
   const [summaryData, setSummaryData] = useState<SummaryResult | null>(null);
   const [summaryError, setSummaryError] = useState<string | null>(null);
+  const [summaryDegraded, setSummaryDegraded] = useState<boolean>(false);
   const [hasCopiedSummary, setHasCopiedSummary] = useState<boolean>(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -191,22 +170,14 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
     setMode(targetMode);
 
     try {
-      const response = await fetchWithRetry('/api/proofread', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: inputText,
-          mode: targetMode,
-          customTone: customToneText,
-        }),
+      const data = await requestAi<ProofreadResult & { degraded?: boolean }>('/api/proofread', {
+        text: inputText,
+        mode: targetMode,
+        customTone: customToneText,
       });
 
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(err.error || `Server error: ${response.status}`);
-      }
-
-      const data: ProofreadResult = await response.json();
+      reportCloudSuccess();
+      setUsingDeviceEngine(Boolean(data.degraded));
       setResult(data);
       setAcceptedChanges({});
 
@@ -230,6 +201,7 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
       onSaveHistory(titleModeMap[targetMode], data.improvedText.slice(0, 100), data);
     } catch (err: unknown) {
       console.error('Proofreading Error:', err);
+      reportCloudFailure(err);
       const msg = err instanceof Error ? err.message : 'An unexpected error occurred';
       setError(`${language === 'en' ? 'Processing failed:' : 'প্রক্রিয়াকরণ ব্যর্থ হয়েছে:'} ${msg}`);
     } finally {
@@ -254,21 +226,16 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
     setIsSummaryOpen(true);
 
     try {
-      const response = await fetchWithRetry('/api/summarize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: inputText }),
+      const data = await requestAi<SummaryResult & { degraded?: boolean }>('/api/summarize', {
+        text: inputText,
       });
 
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(err.error || `Server error: ${response.status}`);
-      }
-
-      const data: SummaryResult = await response.json();
+      reportCloudSuccess();
+      setSummaryDegraded(Boolean(data.degraded));
       setSummaryData(data);
     } catch (err: unknown) {
       console.error('Summarize error:', err);
+      reportCloudFailure(err);
       const msg = err instanceof Error ? err.message : 'Summarization failed';
       setSummaryError(msg);
     } finally {
@@ -377,30 +344,24 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
 
     try {
       setIsPlayingAudio(true);
-      const res = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: textToSpeak.slice(0, 400),
-        }),
+      const data = await requestAi<{ audioBase64?: string; mimeType?: string }>('/api/tts', {
+        text: textToSpeak.slice(0, 400),
       });
 
-      if (!res.ok) throw new Error('TTS failed');
-
-      const data = await res.json();
       if (data.audioBase64) {
-        const audio = new Audio(`data:audio/wav;base64,${data.audioBase64}`);
+        const audio = new Audio(`data:${data.mimeType || 'audio/wav'};base64,${data.audioBase64}`);
         audioRef.current = audio;
         audio.onended = () => setIsPlayingAudio(false);
         audio.play();
+        return;
       }
-    } catch {
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(textToSpeak.slice(0, 300));
-        utterance.lang = 'bn-BD';
-        utterance.onend = () => setIsPlayingAudio(false);
-        window.speechSynthesis.speak(utterance);
-      } else {
+      throw new Error('No audio returned');
+    } catch (err) {
+      reportCloudFailure(err);
+      // On-device speech synthesis fallback (no key, no network)
+      try {
+        await deviceSpeak(textToSpeak.slice(0, 600));
+      } finally {
         setIsPlayingAudio(false);
       }
     }
@@ -783,6 +744,11 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
                   {result.analysis.readabilityScore}/100 {t.writerScore}
                 </span>
               )}
+              {usingDeviceEngine && (
+                <span className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 dark:text-amber-300 dark:bg-amber-950/40 dark:border-amber-800/40 px-2 py-0.5 rounded-md font-semibold">
+                  {language === 'en' ? 'On-device rules' : 'অন-ডিভাইস নিয়ম'}
+                </span>
+              )}
             </div>
 
             {/* Output Toolbar with Export Dropdown */}
@@ -1115,7 +1081,7 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
                     <h2 className="text-sm sm:text-base font-bold text-stone-900 dark:text-white flex items-center gap-2">
                       <span>{language === 'en' ? 'Concise AI Summary' : 'এআই সারসংক্ষেপ'}</span>
                       <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-sm bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-300 border border-teal-200 dark:border-teal-800/40 font-semibold">
-                        Gemini 3.8
+                        {summaryDegraded ? (language === 'en' ? 'On-device' : 'অন-ডিভাইস') : 'Gemini 3.8'}
                       </span>
                     </h2>
                     <p className="text-[11px] text-stone-500 dark:text-neutral-400 mt-0.5">

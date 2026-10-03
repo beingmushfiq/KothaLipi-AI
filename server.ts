@@ -22,15 +22,49 @@ app.use(cors());
 app.use(express.json({ limit: '60mb' }));
 app.use(express.urlencoded({ limit: '60mb', extended: true }));
 
-// Initialize Gemini Client
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build',
-    },
-  },
-});
+// Initialize Gemini Client (only when a key is actually configured)
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY?.trim();
+const aiConfigured = Boolean(GEMINI_API_KEY);
+
+const ai = aiConfigured
+  ? new GoogleGenAI({
+      apiKey: GEMINI_API_KEY,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        },
+      },
+    })
+  : null;
+
+// Machine-readable error codes so the client can decide whether to degrade
+// to an on-device engine instead of showing a raw failure.
+export type AiErrorCode = 'NO_API_KEY' | 'QUOTA_EXHAUSTED' | 'UPSTREAM_ERROR';
+
+function classifyAiError(error: unknown): { code: AiErrorCode; status: number } {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === 'string'
+        ? error
+        : JSON.stringify(error || '');
+  const msg = String(raw).toLowerCase();
+
+  if (msg.includes('api key') || msg.includes('api_key') || msg.includes('unauthenticated') || msg.includes('permission denied') || msg.includes('401') || msg.includes('403')) {
+    return { code: 'NO_API_KEY', status: 503 };
+  }
+  if (
+    msg.includes('429') ||
+    msg.includes('resource_exhausted') ||
+    msg.includes('quota') ||
+    msg.includes('rate limit') ||
+    msg.includes('rate-limit') ||
+    msg.includes('too many requests')
+  ) {
+    return { code: 'QUOTA_EXHAUSTED', status: 429 };
+  }
+  return { code: 'UPSTREAM_ERROR', status: 502 };
+}
 
 // Helper function with automatic retry and model fallback on 503/429 spikes
 async function generateContentWithRetry(params: {
@@ -38,6 +72,10 @@ async function generateContentWithRetry(params: {
   contents: unknown;
   config?: Record<string, unknown>;
 }) {
+  if (!ai) {
+    throw new Error('NO_API_KEY: GEMINI_API_KEY is not configured on the server.');
+  }
+
   const modelsToTry = [
     params.preferredModel || 'gemini-3.8-flash',
     'gemini-3.1-flash-lite',
@@ -62,6 +100,22 @@ async function generateContentWithRetry(params: {
   }
   throw lastError;
 }
+
+// Health probe: lets the client know at boot whether cloud AI is available
+// so it can start directly in on-device mode instead of failing once.
+app.get('/api/health', (_req: Request, res: Response) => {
+  res.json({
+    ok: true,
+    cloudAi: aiConfigured,
+    capabilities: {
+      ocr: aiConfigured,
+      proofread: aiConfigured,
+      summarize: aiConfigured,
+      transcribe: aiConfigured,
+      tts: aiConfigured,
+    },
+  });
+});
 
 // 1. Bangla OCR Endpoint
 app.post('/api/ocr', async (req: Request, res: Response) => {
@@ -175,8 +229,9 @@ Do not wrap with markdown code fences, return pure valid JSON string only.`;
     res.json(parsedData);
   } catch (error: unknown) {
     console.error('OCR Error:', error);
+    const { code, status } = classifyAiError(error);
     const message = error instanceof Error ? error.message : 'Unknown OCR error';
-    res.status(500).json({ error: `OCR processing failed: ${message}` });
+    res.status(status).json({ error: `OCR processing failed: ${message}`, code });
   }
 });
 
@@ -348,6 +403,7 @@ Output strictly valid JSON with no markdown backticks.`;
         originalText: text,
         improvedText: fallbackText,
         changes: fallbackChanges,
+        degraded: true,
         analysis: {
           readabilityScore: 92,
           tone: mode.startsWith('tone_') ? 'Refined Tone' : 'Standard Bengali',
@@ -434,6 +490,7 @@ Output strictly valid JSON with no markdown backticks.`;
         conciseSummary: topSentences || text.slice(0, 150) + '...',
         bulletPoints: (sentences.length > 0 ? sentences.slice(0, 3) : [text.slice(0, 60)]).map((s) => s.endsWith('।') ? s : s + '।'),
         keyThemes: ['প্রধান ভাব', 'সারমর্ম', 'মূল বক্তব্য'],
+        degraded: true,
         stats: {
           originalWordCount: origWords,
           summaryWordCount: sumWords,
@@ -524,6 +581,7 @@ Do not wrap with markdown code fences, return pure valid JSON string only.`;
     console.error('Transcription Error:', error);
     // If gemini-3.5-transcribe encounters an issue, fallback gracefully to gemini-3.8-flash with audio
     try {
+      if (!ai) throw error;
       console.log('Retrying transcription with gemini-3.8-flash fallback...');
       const cleanBase64 = req.body.audioBase64.replace(/^data:[a-zA-Z0-9/+-]+;base64,/, '');
       const fallbackResp = await ai.models.generateContent({
@@ -547,8 +605,9 @@ Do not wrap with markdown code fences, return pure valid JSON string only.`;
       const parsed = JSON.parse(cleaned);
       return res.json(parsed);
     } catch (fallbackError) {
+      const { code, status } = classifyAiError(error);
       const message = error instanceof Error ? error.message : 'Unknown transcription error';
-      res.status(500).json({ error: `Audio transcription failed: ${message}` });
+      res.status(status).json({ error: `Audio transcription failed: ${message}`, code });
     }
   }
 });
@@ -560,6 +619,13 @@ app.post('/api/tts', async (req: Request, res: Response) => {
 
     if (!text || typeof text !== 'string') {
       return res.status(400).json({ error: 'Text is required for TTS.' });
+    }
+
+    if (!ai) {
+      return res.status(503).json({
+        error: 'TTS unavailable: GEMINI_API_KEY is not configured.',
+        code: 'NO_API_KEY',
+      });
     }
 
     // Limit text length to prevent timeouts
@@ -602,8 +668,9 @@ app.post('/api/tts', async (req: Request, res: Response) => {
     });
   } catch (error: unknown) {
     console.error('TTS Error:', error);
+    const { code, status } = classifyAiError(error);
     const message = error instanceof Error ? error.message : 'TTS failure';
-    res.status(500).json({ error: `TTS processing error: ${message}` });
+    res.status(status).json({ error: `TTS processing error: ${message}`, code });
   }
 });
 
