@@ -4,7 +4,6 @@ import { ScanText, PenTool, Mic, History, LogIn, LogOut, User, Cloud, Settings, 
 import { motion, AnimatePresence } from 'motion/react';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageToggle } from './LanguageToggle';
-import { PWAInstallButton } from './PWAInstallButton';
 import { ProfileSettingsModal } from './ProfileSettingsModal';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
@@ -95,19 +94,19 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, history
             className="group flex items-center gap-3"
           >
             <BrandLogo size="md" />
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0">
               <div className="flex items-center gap-2">
-                <span className="font-brand font-black text-lg sm:text-xl tracking-tight text-stone-900 dark:text-white group-hover:text-teal-700 dark:group-hover:text-teal-300 transition-colors leading-none">
+                <span className="font-brand font-black text-base sm:text-xl tracking-tight text-stone-900 dark:text-white group-hover:text-teal-700 dark:group-hover:text-teal-300 transition-colors leading-none truncate">
                   {t.brandName}
                 </span>
-                <span className="font-bangla-brand text-xs sm:text-sm font-bold text-teal-700 dark:text-teal-400 leading-none">
+                <span className="hidden min-[400px]:inline font-bangla-brand text-xs sm:text-sm font-bold text-teal-700 dark:text-teal-400 leading-none">
                   {language === 'en' ? 'কথালিপি' : 'KothaLipi'}
                 </span>
-                <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-teal-500/10 text-teal-700 dark:bg-teal-400/15 dark:text-teal-300 border border-teal-500/25 tracking-wider">
+                <span className="hidden sm:inline text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-teal-500/10 text-teal-700 dark:bg-teal-400/15 dark:text-teal-300 border border-teal-500/25 tracking-wider">
                   AI
                 </span>
               </div>
-              <span className={`text-[11px] text-stone-500 dark:text-neutral-400 tracking-wide mt-1 leading-none ${language === 'bn' ? 'font-bangla' : 'font-sans'}`}>
+              <span className={`hidden sm:block text-[11px] text-stone-500 dark:text-neutral-400 tracking-wide mt-1 leading-none truncate ${language === 'bn' ? 'font-bangla' : 'font-sans'}`}>
                 {t.brandSubtitle}
               </span>
             </div>
@@ -123,7 +122,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, history
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`group relative px-4.5 py-2.5 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap z-10 flex items-center gap-2.5 ${
+                title={tab.label}
+                aria-label={tab.label}
+                className={`group relative px-2.5 xl:px-4.5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap z-10 flex items-center gap-2 xl:gap-2.5 ${
                   isActive
                     ? tab.activeText
                     : tab.inactiveText
@@ -146,12 +147,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, history
                 >
                   <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
                 </div>
-                <span className={language === 'bn' ? 'font-bangla tracking-wide' : 'font-sans'}>
+                <span className={`hidden xl:inline ${language === 'bn' ? 'font-bangla tracking-wide' : 'font-sans'}`}>
                   {tab.label}
                 </span>
                 {typeof tab.count === 'number' && tab.count > 0 && (
                   <span
-                    className={`text-[10px] sm:text-[11px] tabular-nums font-mono px-2 py-0.5 rounded-full font-bold transition-colors ${
+                    className={`text-[10px] sm:text-[11px] tabular-nums font-mono px-1.5 xl:px-2 py-0.5 rounded-full font-bold transition-colors ${
                       isActive
                         ? 'bg-white/25 text-white border border-white/30'
                         : 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50'
@@ -165,9 +166,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, history
           })}
         </nav>
 
-        {/* Zone 3: PWA Install + Language Toggle + Theme Toggle + Google Auth */}
+        {/* Zone 3: Language Toggle + Theme Toggle + Google Auth */}
         <div className="flex items-center gap-1 sm:gap-2.5">
-          <PWAInstallButton variant="nav" />
           <LanguageToggle />
           <ThemeToggle />
 

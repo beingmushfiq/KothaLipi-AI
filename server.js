@@ -1,5 +1,6 @@
 import express from "express";
 import http from "http";
+import fs from "fs";
 import dotenv from "dotenv";
 import cors from "cors";
 import { GoogleGenAI } from "@google/genai";
@@ -573,6 +574,118 @@ app.post("/api/tts", async (req, res) => {
     res.status(status).json({ error: `TTS processing error: ${message}`, code });
   }
 });
+const SITE_BASE = (process.env.APP_URL || "https://kothalipi.devcenterpoint.com").replace(/\/+$/, "");
+const LEGACY_HOSTS = [
+  "https://kothalipi.devcenterpoint.com",
+  "https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app"
+];
+const BASE_KEYWORDS = "KothaLipi, KothaLipi AI, \u0995\u09A5\u09BE\u09B2\u09BF\u09AA\u09BF, \u0995\u09A5\u09BE\u09B2\u09BF\u09AA\u09BF \u098F\u0986\u0987, DevCenterPoint, Bangla AI, \u09AC\u09BE\u0982\u09B2\u09BE \u098F\u0986\u0987 \u099F\u09C1\u09B2\u0995\u09BF\u099F, \u09AC\u09BE\u0982\u09B2\u09BE \u09B6\u09AC\u09CD\u09A6, \u09AC\u09BE\u0982\u09B2\u09BE \u09B2\u09BF\u09AA\u09BF, Bengali document scanner";
+const ROUTE_SEO = {
+  "/": {
+    title: "KothaLipi AI - \u0995\u09A5\u09BE\u09B2\u09BF\u09AA\u09BF \u098F\u0986\u0987: Bengali Intelligence Suite",
+    description: "Comprehensive AI suite for Bengali: High-precision Bangla OCR for scanned documents, writing & proofreading assistant with Sadhu-Cholit conversion, and voice-to-text audio transcription.",
+    keywords: `${BASE_KEYWORDS}, Bangla OCR, Bangla translator, \u09AC\u09BE\u0982\u09B2\u09BE \u0993\u09B8\u09BF\u0986\u09B0, \u09AC\u09BE\u0982\u09B2\u09BE \u0985\u09A8\u09C1\u09AC\u09BE\u09A6\u0995, voice transcribe, Bangla voice to text, Bengali OCR, Bengali translator, Bengali voice transcription, speech to text Bangla, Sadhu to Cholit, \u09B8\u09BE\u09A7\u09C1 \u099A\u09B2\u09BF\u09A4 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0, Bangla proofreader, \u09AC\u09BE\u0982\u09B2\u09BE \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3, Bangla Academy spelling, Sylheti voice transcription, Chittagonian dialect AI`,
+    breadcrumb: "Home"
+  },
+  "/ocr": {
+    title: "Bangla OCR - Bengali Document Scanner | KothaLipi AI",
+    description: "Free high-precision Bangla OCR. Convert scanned Bengali documents, PDFs, NID cards and handwritten manuscripts into editable Unicode text with full \u09AF\u09C1\u0995\u09CD\u09A4\u09AC\u09B0\u09CD\u09A3 (conjunct) preservation.",
+    keywords: `${BASE_KEYWORDS}, Bangla OCR, Bengali OCR, Bangla document scanner, \u09AC\u09BE\u0982\u09B2\u09BE \u0993\u09B8\u09BF\u0986\u09B0, Bengali handwritten manuscript OCR, Bangla NID OCR, Bangla PDF to text, Bangla land deed OCR`,
+    breadcrumb: "Vision OCR"
+  },
+  "/writer": {
+    title: "Bangla Writing Assistant - Bengali Grammar Checker & Proofreader | KothaLipi AI",
+    description: "Free Bengali writing assistant with Bangla Academy standard spelling and grammar proofreading, bidirectional Sadhu to Cholit conversion, and Bangla text summarization.",
+    keywords: `${BASE_KEYWORDS}, Bangla grammar checker, Bengali proofreader, Bangla Academy spelling, \u09AC\u09BE\u0982\u09B2\u09BE \u09AC\u09CD\u09AF\u09BE\u0995\u09B0\u09A3, \u09B8\u09BE\u09A7\u09C1 \u099A\u09B2\u09BF\u09A4 \u09B0\u09C2\u09AA\u09BE\u09A8\u09CD\u09A4\u09B0, Bangla writing assistant, Bangla translator, Bengali text summarizer, Bangla proofreading`,
+    breadcrumb: "Writing Studio"
+  },
+  "/voice": {
+    title: "Bengali Voice to Text - Bangla Speech Transcription | KothaLipi AI",
+    description: "Transcribe Bangla audio and speech to text with regional dialect support (Sylheti, Chittagonian, Dhakaiya), speaker diarization and standard Bengali normalization.",
+    keywords: `${BASE_KEYWORDS}, voice transcribe, Bangla voice to text, Bengali speech to text, \u09AC\u09BE\u0982\u09B2\u09BE \u09AD\u09AF\u09BC\u09C7\u09B8 \u099F\u09C1 \u099F\u09C7\u0995\u09CD\u09B8\u099F, Sylheti voice transcription, Chittagonian dialect AI, bangla audio transcription, Bengali speech recognition`,
+    breadcrumb: "Voice to Text"
+  },
+  "/history": {
+    title: "Activity History & Cloud Sync | KothaLipi AI",
+    description: "Access your synced Bengali OCR scans, writing revisions and voice transcripts across devices with secure Google sign-in and Firebase cloud storage.",
+    keywords: `${BASE_KEYWORDS}, KothaLipi history, Bengali OCR history, Bangla transcript archive, cloud sync`,
+    breadcrumb: "History"
+  }
+};
+const SITE_ROUTES = Object.keys(ROUTE_SEO);
+function buildRouteHtml(route, templatePath) {
+  if (!fs.existsSync(templatePath)) return null;
+  const seo = ROUTE_SEO[route] ?? ROUTE_SEO["/"];
+  const canonical = `${SITE_BASE}${route}`;
+  let html = fs.readFileSync(templatePath, "utf8");
+  for (const host of LEGACY_HOSTS) {
+    if (host !== SITE_BASE) html = html.split(host).join(SITE_BASE);
+  }
+  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${seo.title}</title>`);
+  html = html.replace(/<meta\s+name="description"[\s\S]*?\/>/, `<meta name="description" content="${seo.description}" />`);
+  html = html.replace(/<meta\s+name="keywords"[\s\S]*?\/>/, `<meta name="keywords" content="${seo.keywords}" />`);
+  html = html.replace(/<meta\s+name="DC\.title"[\s\S]*?\/>/, `<meta name="DC.title" content="${seo.title}" />`);
+  html = html.replace(/<meta\s+property="og:title"[\s\S]*?\/>/, `<meta property="og:title" content="${seo.title}" />`);
+  html = html.replace(/<meta\s+property="og:description"[\s\S]*?\/>/, `<meta property="og:description" content="${seo.description}" />`);
+  html = html.replace(/<meta\s+property="og:url"[\s\S]*?\/>/, `<meta property="og:url" content="${canonical}" />`);
+  html = html.replace(/<meta\s+name="twitter:title"[\s\S]*?\/>/, `<meta name="twitter:title" content="${seo.title}" />`);
+  html = html.replace(/<meta\s+name="twitter:description"[\s\S]*?\/>/, `<meta name="twitter:description" content="${seo.description}" />`);
+  html = html.replace(
+    /<link rel="canonical"[\s\S]*?hreflang="x-default"[^>]*\/>/,
+    [
+      `<link rel="canonical" href="${canonical}" />`,
+      `<link rel="alternate" hreflang="bn" href="${canonical}?lang=bn" />`,
+      `<link rel="alternate" hreflang="en" href="${canonical}?lang=en" />`,
+      `<link rel="alternate" hreflang="x-default" href="${canonical}" />`
+    ].join("\n    ")
+  );
+  const graph = [
+    {
+      "@type": "WebPage",
+      "@id": `${canonical}#webpage`,
+      url: canonical,
+      name: seo.title,
+      description: seo.description,
+      inLanguage: ["bn", "en"],
+      isPartOf: { "@id": `${SITE_BASE}/#website` },
+      primaryImageOfPage: { "@type": "ImageObject", url: `${SITE_BASE}/pwa-512x512.png` },
+      ...route !== "/" && { breadcrumb: { "@id": `${canonical}#breadcrumb` } }
+    }
+  ];
+  if (route !== "/") {
+    graph.push({
+      "@type": "BreadcrumbList",
+      "@id": `${canonical}#breadcrumb`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "KothaLipi AI", item: `${SITE_BASE}/` },
+        { "@type": "ListItem", position: 2, name: seo.breadcrumb, item: canonical }
+      ]
+    });
+  }
+  const jsonLd = JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
+  html = html.replace("</head>", `    <script type="application/ld+json">${jsonLd}</script>
+  </head>`);
+  return html;
+}
+app.get("/sitemap.xml", (_req, res) => {
+  const sitemapCandidates = [
+    path.join(__dirname, "public", "sitemap.xml"),
+    path.join(__dirname, "dist", "sitemap.xml")
+  ];
+  const sitemapPath = sitemapCandidates.find((p) => fs.existsSync(p));
+  if (sitemapPath) {
+    let content = fs.readFileSync(sitemapPath, "utf8");
+    if (process.env.APP_URL) {
+      const canonicalBase = "https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app";
+      const runtimeBase = process.env.APP_URL.replace(/\/$/, "");
+      content = content.replaceAll(canonicalBase, runtimeBase);
+    }
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    return res.send(content);
+  }
+  res.status(404).send("Sitemap not found");
+});
 async function startServer() {
   const httpServer = http.createServer(app);
   if (process.env.NODE_ENV !== "production") {
@@ -586,9 +699,18 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.join(__dirname, "dist")));
+    const distDir = path.join(__dirname, "dist");
+    const templatePath = path.join(distDir, "index.html");
+    app.get(SITE_ROUTES, (req, res) => {
+      const html = buildRouteHtml(req.path.replace(/\/+$/, "") || "/", templatePath);
+      if (!html) return res.status(500).send("Application shell unavailable");
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+      res.send(html);
+    });
+    app.use(express.static(distDir));
     app.get("*", (_req, res) => {
-      res.sendFile(path.join(__dirname, "dist", "index.html"));
+      res.sendFile(templatePath);
     });
   }
   httpServer.listen(PORT, () => {

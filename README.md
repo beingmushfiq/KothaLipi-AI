@@ -11,7 +11,7 @@
 [![DevCenterPoint](https://img.shields.io/badge/Engineered%20by-DevCenterPoint-2563eb?style=for-the-badge&logo=google-cloud&logoColor=white)](https://devcenterpoint.com)
 [![React 19](https://img.shields.io/badge/React%2019-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript%205-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Gemini 2.5](https://img.shields.io/badge/Powered%20by-Gemini%202.5%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev)
+[![Gemini 3.8](https://img.shields.io/badge/Powered%20by-Gemini%203.8%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind%20CSS%20v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Firebase Firestore](https://img.shields.io/badge/Cloud%20Sync-Firebase%20Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable%20Mobile%20App-0f766e?style=for-the-badge&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
@@ -90,7 +90,7 @@ In the Bengali linguistic tradition, **KothaLipi (কথালিপি)** repre
                             │ /api/* (Reverse Proxy)
 ┌───────────────────────────▼────────────────────────────┐
 │          Express Full-Stack Server (server.ts)         │
-│  - @google/genai SDK (Gemini 2.5 Flash)                │
+│  - @google/genai SDK (Gemini 3.8 Flash tiers)           │
 │  - Multimodal Vision, Audio & Linguistic Pipelines     │
 └───────────────────────────┬────────────────────────────┘
                             │ Persistent Sync
@@ -105,7 +105,7 @@ In the Bengali linguistic tradition, **KothaLipi (কথালিপি)** repre
 | **Brand Identity** | **KothaLipi (কথালিপি)** — *Voice, Vision & Script Engine* |
 | **Frontend** | React 19, TypeScript 5, Vite 8, Tailwind CSS v4, Motion, GSAP, Lucide Icons |
 | **Backend** | Node.js, Express, tsx, CORS |
-| **AI Models** | `@google/genai` TypeScript SDK (`gemini-2.5-flash`) |
+| **AI Models** | `@google/genai` TypeScript SDK (`gemini-3.8-flash`, fallback `gemini-3.1-flash-lite`; `gemini-3.5-transcribe` for audio with `gemini-3.8-flash` fallback; `gemini-3.8-flash-lite-tts` for speech synthesis) |
 | **Typography** | `Outfit`, `Anek Bangla`, `Hind Siliguri`, `Plus Jakarta Sans`, `JetBrains Mono` |
 | **Database & Auth** | Google Firebase Firestore, Firebase Authentication |
 | **Export Engines** | `docx` (Word Documents), Native Canvas / Print (PDF) |
@@ -135,6 +135,8 @@ npm install
 Create a `.env` file in the project root:
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
+APP_URL=https://kothalipi.devcenterpoint.com
+NODE_ENV=production
 PORT=3000
 ```
 
@@ -156,6 +158,7 @@ npm start
 
 | Endpoint | Method | Purpose | Payload |
 |---|---|---|---|
+| `/api/health` | `GET` | Service health, AI engine availability & model tiers | — |
 | `/api/ocr` | `POST` | Scanned document OCR & field extraction | `{ imageBase64, mimeType, mode }` |
 | `/api/proofread` | `POST` | Grammar check, Sadhu-Cholit, tone rewrite | `{ text, mode, targetTone }` |
 | `/api/transcribe` | `POST` | Audio voice-to-text with dialect parsing | `{ audioBase64, mimeType, dialect }` |

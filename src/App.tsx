@@ -30,13 +30,53 @@ import { db } from './firebase';
 
 const STORAGE_KEY = 'bangla_ai_toolkit_history_v1';
 
+function getInitialTab(): ActiveTab {
+  if (typeof window === 'undefined') return 'ocr';
+  const path = window.location.pathname.toLowerCase().replace(/^\/+|\/+$/g, '');
+  const hash = window.location.hash.toLowerCase().replace(/^#+/, '');
+  const target = path || hash;
+
+  if (target === 'writer' || target === 'writing-assistant' || target === 'writing') return 'writer';
+  if (target === 'voice' || target === 'voice-to-text' || target === 'speech') return 'voice';
+  if (target === 'history' || target === 'archive') return 'history';
+  return 'ocr';
+}
+
 function AppContent() {
   const { t, language } = useLanguage();
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<ActiveTab>('ocr');
+  const [activeTab, setActiveTab] = useState<ActiveTab>(getInitialTab);
   const [writerInitialText, setWriterInitialText] = useState<string>('');
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Sync browser back/forward and hash changes with active workspace tab
+  useEffect(() => {
+    const handleUrlChange = () => {
+      setActiveTab(getInitialTab());
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, []);
+
+  // Update browser URL pathname when user switches workspaces
+  useEffect(() => {
+    const path = window.location.pathname.toLowerCase().replace(/^\/+|\/+$/g, '');
+    const expectedPath = activeTab === 'ocr' ? '' : activeTab;
+    if (
+      path !== expectedPath &&
+      path !== `vision-${activeTab}` &&
+      path !== `${activeTab}-assistant` &&
+      path !== `${activeTab}-to-text`
+    ) {
+      const newUrl = expectedPath ? `/${expectedPath}` : '/';
+      window.history.replaceState({ tab: activeTab }, '', newUrl + window.location.search);
+    }
+  }, [activeTab]);
 
   // Load / sync history from Firestore (if user signed in) or LocalStorage
   useEffect(() => {
@@ -293,7 +333,7 @@ function AppContent() {
       />
 
       {/* Floating In-App Install Prompt Banner */}
-      <PWAInstallButton variant="floating" />
+      <PWAInstallButton />
     </div>
   );
 }

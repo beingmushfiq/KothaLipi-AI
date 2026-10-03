@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
-import { Download, Smartphone, X, Share, PlusSquare, Sparkles } from 'lucide-react';
+import { Download, X, Share, PlusSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../context/LanguageContext';
 
 interface PWAInstallButtonProps {
-  variant?: 'nav' | 'banner' | 'floating';
   className?: string;
 }
 
 export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
-  variant = 'nav',
   className = '',
 }) => {
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
@@ -38,82 +36,62 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
 
   return (
     <>
-      {/* 1. Header / Navbar compact button */}
-      {variant === 'nav' && (
-        <button
-          type="button"
-          onClick={handleInstallClick}
-          className={`flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs font-semibold bg-teal-700/10 hover:bg-teal-700/20 text-teal-800 dark:bg-teal-500/15 dark:hover:bg-teal-500/25 dark:text-teal-300 border border-teal-700/20 dark:border-teal-500/30 transition-all shadow-2xs hover:scale-105 active:scale-95 ${className}`}
-          title={language === 'en' ? 'Install KothaLipi as Native App' : 'নেটিভ অ্যাপ হিসেবে ইনস্টল করুন'}
+      {/* Floating Install Banner (docked bottom-right, mobile bottom) */}
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          className={`fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-40 max-w-sm w-[calc(100vw-1.5rem)] sm:w-auto p-3.5 rounded-2xl bg-white/95 dark:bg-[#0c121d]/95 backdrop-blur-xl border border-teal-500/30 shadow-xl shadow-stone-950/10 dark:shadow-black/50 ${className}`}
         >
-          <Smartphone className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-          <span className="hidden sm:inline font-sans">
-            {language === 'en' ? 'Install App' : 'অ্যাপ ইনস্টল'}
-          </span>
-          <span className="sm:hidden font-sans">
-            {language === 'en' ? 'App' : 'ইনস্টল'}
-          </span>
-        </button>
-      )}
-
-      {/* 2. Floating Mobile App Banner (docked bottom-right or top-notch) */}
-      {variant === 'floating' && (
-        <AnimatePresence>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className={`fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-40 max-w-sm w-[calc(100vw-1.5rem)] sm:w-auto p-3.5 rounded-2xl bg-white/95 dark:bg-[#0c121d]/95 backdrop-blur-xl border border-teal-500/30 shadow-xl shadow-stone-950/10 dark:shadow-black/50 ${className}`}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/pwa-192x192.png"
-                  alt="KothaLipi App Icon"
-                  className="w-10 h-10 rounded-xl shadow-sm border border-teal-500/20"
-                />
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-brand font-black text-sm text-stone-900 dark:text-white">
-                      KothaLipi (কথালিপি)
-                    </span>
-                    <span className="text-[9px] font-mono font-bold px-1 py-0.2 rounded bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-500/30">
-                      PWA
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-stone-500 dark:text-neutral-400 mt-0.5">
-                    {language === 'en'
-                      ? 'Install on Home Screen for instant offline speed.'
-                      : 'দ্রুত ব্যবহার করতে হোম স্ক্রিনে অ্যাপ ইনস্টল করুন।'}
-                  </p>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <img
+                src="/pwa-192x192.png"
+                alt="KothaLipi App Icon"
+                className="w-10 h-10 rounded-xl shadow-sm border border-teal-500/20"
+              />
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-brand font-black text-sm text-stone-900 dark:text-white">
+                    KothaLipi AI
+                  </span>
+                  <span className="text-[9px] font-mono font-bold px-1 py-0.2 rounded bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-500/30">
+                    PWA
+                  </span>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={handleInstallClick}
-                  className="px-3 py-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-500 dark:hover:bg-teal-400 dark:text-neutral-950 font-bold text-xs shadow-sm transition-all hover:scale-105 active:scale-95 shrink-0 flex items-center gap-1"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>{language === 'en' ? 'Install' : 'ইনস্টল'}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsDismissed(true)}
-                  className="p-1 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors"
-                  aria-label="Dismiss banner"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                <p className="text-[11px] text-stone-500 dark:text-neutral-400 mt-0.5">
+                  {language === 'en'
+                    ? 'Install on Home Screen for instant offline speed.'
+                    : 'দ্রুত ব্যবহার করতে হোম স্ক্রিনে অ্যাপ ইনস্টল করুন।'}
+                </p>
               </div>
             </div>
-          </motion.div>
-        </AnimatePresence>
-      )}
 
-      {/* 3. iOS Safari Guided Install Sheet */}
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleInstallClick}
+                className="px-3 py-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white dark:bg-teal-500 dark:hover:bg-teal-400 dark:text-neutral-950 font-bold text-xs shadow-sm transition-all hover:scale-105 active:scale-95 shrink-0 flex items-center gap-1"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>{language === 'en' ? 'Install' : 'ইনস্টল'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsDismissed(true)}
+                className="p-1 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors"
+                aria-label="Dismiss banner"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* iOS Safari Guided Install Sheet */}
       <AnimatePresence>
         {showIOSModal && (
           <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-3 sm:p-4">
