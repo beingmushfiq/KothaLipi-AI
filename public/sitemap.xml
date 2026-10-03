@@ -2,7 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <!-- Primary Homepage & KothaLipi Studio Hub -->
+
+  <!-- 1. KothaLipi AI Primary Hub & Home -->
   <url>
     <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/</loc>
     <lastmod>2026-10-03</lastmod>
@@ -13,48 +14,86 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/" />
     <image:image>
       <image:loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/logo.svg</image:loc>
-      <image:title>KothaLipi (কথালিপি) Logo</image:title>
-      <image:caption>KothaLipi – The Bengali Voice, Vision &amp; Writing Engine</image:caption>
+      <image:title>KothaLipi AI (কথালিপি এআই) Logo</image:title>
+      <image:caption>KothaLipi AI - Bengali Intelligence Suite</image:caption>
     </image:image>
   </url>
 
-  <!-- Workspace 1: Vision OCR (নথি পাঠ) -->
+  <!-- 2. Workspace: Vision OCR (নথি পাঠ - স্ক্যান করা দলিল ও পাণ্ডুলিপি রূপান্তর) -->
   <url>
-    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#ocr</loc>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/ocr</loc>
     <lastmod>2026-10-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#ocr" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#ocr" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/ocr?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/ocr?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/ocr" />
   </url>
 
-  <!-- Workspace 2: Writing Studio (শুদ্ধ লেখনী) -->
+  <!-- 2b. Workspace Alias: Vision OCR Route -->
   <url>
-    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#writer</loc>
-    <lastmod>2026-10-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#writer" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#writer" />
-  </url>
-
-  <!-- Workspace 3: Voice to Text (কণ্ঠস্বর) -->
-  <url>
-    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#voice</loc>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/vision-ocr</loc>
     <lastmod>2026-10-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#voice" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#voice" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/vision-ocr?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/vision-ocr?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/vision-ocr" />
   </url>
 
-  <!-- Workspace 4: History Archive (হিস্ট্রি) -->
+  <!-- 3. Workspace: Writing Assistant & Proofreading Studio (শুদ্ধ লেখনী ও ব্যাকরণ) -->
   <url>
-    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#history</loc>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/writer</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/writer?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/writer?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/writer" />
+  </url>
+
+  <!-- 3b. Workspace Alias: Writing Assistant Route -->
+  <url>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/writing-assistant</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/writing-assistant?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/writing-assistant?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/writing-assistant" />
+  </url>
+
+  <!-- 4. Workspace: Voice Transcription & Speech-to-Text (কণ্ঠস্বর - অডিও প্রতিলিপি) -->
+  <url>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/voice</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/voice?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/voice?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/voice" />
+  </url>
+
+  <!-- 4b. Workspace Alias: Voice-to-Text Route -->
+  <url>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/voice-to-text</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/voice-to-text?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/voice-to-text?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/voice-to-text" />
+  </url>
+
+  <!-- 5. Workspace: Activity & Cloud Sync History Archive (হিস্ট্রি ও সংরক্ষণাগার) -->
+  <url>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/history</loc>
     <lastmod>2026-10-03</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#history" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#history" />
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/history?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/history?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/history" />
   </url>
+
 </urlset>

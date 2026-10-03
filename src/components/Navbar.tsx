@@ -4,7 +4,6 @@ import { ScanText, PenTool, Mic, History, LogIn, LogOut, User, Cloud, Settings, 
 import { motion, AnimatePresence } from 'motion/react';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageToggle } from './LanguageToggle';
-import { PWAInstallButton } from './PWAInstallButton';
 import { ProfileSettingsModal } from './ProfileSettingsModal';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
@@ -165,9 +164,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, history
           })}
         </nav>
 
-        {/* Zone 3: PWA Install + Language Toggle + Theme Toggle + Google Auth */}
+        {/* Zone 3: Language Toggle + Theme Toggle + Google Auth */}
         <div className="flex items-center gap-1 sm:gap-2.5">
-          <PWAInstallButton variant="nav" />
           <LanguageToggle />
           <ThemeToggle />
 

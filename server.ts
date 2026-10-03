@@ -1,6 +1,7 @@
 import express from 'express';
 import type { Request, Response } from 'express';
 import http from 'http';
+import fs from 'fs';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { GoogleGenAI } from '@google/genai';
@@ -605,6 +606,28 @@ app.post('/api/tts', async (req: Request, res: Response) => {
     const message = error instanceof Error ? error.message : 'TTS failure';
     res.status(500).json({ error: `TTS processing error: ${message}` });
   }
+});
+
+// SEO: Sitemap.xml route supporting dynamic domain resolution
+app.get('/sitemap.xml', (_req: Request, res: Response) => {
+  const sitemapCandidates = [
+    path.join(__dirname, 'public', 'sitemap.xml'),
+    path.join(__dirname, 'dist', 'sitemap.xml'),
+  ];
+  const sitemapPath = sitemapCandidates.find((p) => fs.existsSync(p));
+
+  if (sitemapPath) {
+    let content = fs.readFileSync(sitemapPath, 'utf8');
+    if (process.env.APP_URL) {
+      const canonicalBase = 'https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app';
+      const runtimeBase = process.env.APP_URL.replace(/\/$/, '');
+      content = content.replaceAll(canonicalBase, runtimeBase);
+    }
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    return res.send(content);
+  }
+  res.status(404).send('Sitemap not found');
 });
 
 // Setup Vite middlewares in development or serve static in production

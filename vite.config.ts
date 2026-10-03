@@ -18,8 +18,8 @@ export default defineConfig(() => {
         ],
         manifest: {
           id: '/',
-          name: 'KothaLipi · The Bengali Voice, Vision & Writing Engine',
-          short_name: 'KothaLipi',
+          name: 'KothaLipi AI - কথালিপি এআই: Bengali Intelligence Suite',
+          short_name: 'KothaLipi AI',
           description:
             'The intelligent Bengali voice, vision & writing engine: Document OCR, Bangla Academy proofreading, and voice-to-text audio transcription.',
           theme_color: '#0f766e',
