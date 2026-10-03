@@ -173,8 +173,8 @@ interface Translations {
 
 const translations: Record<Language, Translations> = {
   en: {
-    brandName: 'Shobdo',
-    brandSubtitle: 'Bengali Word, Vision & Voice Engine',
+    brandName: 'KothaLipi',
+    brandSubtitle: 'Bengali Voice, Vision & Writing Engine',
     navOcr: 'Vision OCR',
     navWriter: 'Writing Studio',
     navVoice: 'Voice to Text',
@@ -327,8 +327,8 @@ const translations: Record<Language, Translations> = {
     googleSignInPrompt: 'Sign in with Google to save your history and full outcomes to your individual account.',
     googleSyncActive: 'Cloud Sync Active',
 
-    footerTitle: 'Shobdo · শব্দ',
-    footerDesc: 'The Bengali Word, Vision & Voice Engine',
+    footerTitle: 'KothaLipi · কথালিপি',
+    footerDesc: 'The Bengali Voice, Vision & Writing Engine',
     footerStandard: 'Bangla Academy Standard Orthography Protocols',
     footerTech: 'Multimodal Audio & Vision Engineering',
     footerWorkspacesTitle: 'Workspaces',
@@ -341,8 +341,8 @@ const translations: Record<Language, Translations> = {
   },
 
   bn: {
-    brandName: 'শব্দ',
-    brandSubtitle: 'বাংলা শব্দ, লিপি ও কণ্ঠস্বর এআই',
+    brandName: 'কথালিপি',
+    brandSubtitle: 'কণ্ঠস্বর, লিপি ও লেখনী এআই',
     navOcr: 'নথি পাঠ (OCR)',
     navWriter: 'শুদ্ধ লেখনী',
     navVoice: 'কণ্ঠস্বর (Voice)',
@@ -495,8 +495,8 @@ const translations: Record<Language, Translations> = {
     googleSignInPrompt: 'আপনার ব্যক্তিগত অ্যাকাউন্টে ফলাফল ও হিস্ট্রি সুরক্ষিত রাখতে গুগল দিয়ে সাইন ইন করুন।',
     googleSyncActive: 'ক্লাউড সিঙ্ক চালু আছে',
 
-    footerTitle: 'শব্দ · Shobdo',
-    footerDesc: 'বাংলা ভাষার দৃষ্টি, লেখনী ও কণ্ঠস্বরের এআই ইঞ্জিন',
+    footerTitle: 'কথালিপি · KothaLipi',
+    footerDesc: 'বাংলা ভাষার কণ্ঠস্বর, লিপি ও লেখনীর এআই ইঞ্জিন',
     footerStandard: 'বাংলা একাডেমি প্রমিত বানান প্রটোকল',
     footerTech: 'মাল্টিমোডাল অডিও ও ভিশন ইঞ্জিনিয়ারিং',
     footerWorkspacesTitle: 'ওয়ার্কস্পেস ও মডিউল',

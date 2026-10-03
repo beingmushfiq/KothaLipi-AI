@@ -17,7 +17,6 @@ import {
   ListOrdered,
 } from 'lucide-react';
 import { TranscriptionResult } from '../types';
-import { SAMPLE_AUDIOS, generateTestAudioDataUrl } from '../data/samples';
 import { motion, AnimatePresence } from 'motion/react';
 import gsap from 'gsap';
 import { useTheme } from '../context/ThemeContext';
@@ -42,7 +41,6 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
   const [audioBlobUrl, setAudioBlobUrl] = useState<string | null>(null);
   const [audioBase64, setAudioBase64] = useState<string | null>(null);
   const [audioMimeType, setAudioMimeType] = useState<string>('audio/webm');
-  const [selectedSampleId, setSelectedSampleId] = useState<string>('audio-dhaka');
   const [dialectNormalization, setDialectNormalization] = useState<boolean>(true);
   const [speakerDiarization, setSpeakerDiarization] = useState<boolean>(true);
 
@@ -66,7 +64,6 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
   const transcriptContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    handleSelectSample('audio-dhaka');
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
@@ -83,34 +80,9 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
     }
   }, [result]);
 
-  const handleSelectSample = (sampleId: string) => {
-    setSelectedSampleId(sampleId);
-    const sample = SAMPLE_AUDIOS.find((s) => s.id === sampleId);
-    if (!sample) return;
-
-    setError(null);
-    setResult(null);
-
-    const url = generateTestAudioDataUrl(sample.transcriptPreview);
-    setAudioBlobUrl(url);
-    setAudioMimeType('audio/wav');
-
-    fetch(url)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setAudioBase64(reader.result as string);
-        };
-        reader.readAsDataURL(blob);
-      })
-      .catch((err) => console.error('Sample fetch error:', err));
-  };
-
   const startRecording = async () => {
     setError(null);
     setResult(null);
-    setSelectedSampleId('');
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -212,7 +184,6 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
 
     setError(null);
     setResult(null);
-    setSelectedSampleId('');
 
     const url = URL.createObjectURL(file);
     setAudioBlobUrl(url);
@@ -331,11 +302,11 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap w-full sm:w-auto">
             <button
               onClick={runTranscription}
               disabled={isLoading || !audioBase64 || isRecording}
-              className="flex items-center gap-2 px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white dark:bg-gradient-to-r dark:from-teal-500 dark:to-emerald-600 dark:hover:from-teal-400 dark:hover:to-emerald-500 disabled:opacity-40 dark:text-neutral-950 font-semibold text-xs sm:text-sm rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full sm:w-auto justify-center flex items-center gap-2 px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white dark:bg-gradient-to-r dark:from-teal-500 dark:to-emerald-600 dark:hover:from-teal-400 dark:hover:to-emerald-500 disabled:opacity-40 dark:text-neutral-950 font-semibold text-xs sm:text-sm rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               {isLoading ? (
                 <>
@@ -350,27 +321,6 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
               )}
             </button>
           </div>
-        </div>
-
-        {/* Quick Sample Selector */}
-        <div className="mt-5 pt-4 border-t border-stone-200/80 dark:border-white/[0.06] flex flex-wrap items-center gap-2.5">
-          <span className="text-xs text-stone-600 dark:text-neutral-400 font-semibold mr-1">
-            {t.voiceSampleLabel}
-          </span>
-          {SAMPLE_AUDIOS.map((sample) => (
-            <button
-              key={sample.id}
-              onClick={() => handleSelectSample(sample.id)}
-              className={`group px-3 py-1.5 rounded-lg text-xs font-bangla transition-all border flex items-center gap-2 ${
-                selectedSampleId === sample.id
-                  ? 'bg-teal-700/10 border-teal-700/30 text-teal-800 font-semibold dark:bg-teal-500/15 dark:border-teal-500/40 dark:text-teal-300 shadow-2xs'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200 dark:bg-white/[0.02] dark:border-white/[0.06] dark:text-neutral-400 dark:hover:text-neutral-200 dark:hover:bg-white/[0.05]'
-              }`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-teal-600 dark:bg-teal-400 transition-colors" />
-              <span>{sample.title}</span>
-            </button>
-          ))}
         </div>
       </div>
 
@@ -426,7 +376,7 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
       {/* Main Studio Viewport */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         {/* Left Side: Recording Console & Player */}
-        <div className="glass-panel rounded-2xl flex flex-col h-[560px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
+        <div className="glass-panel rounded-2xl flex flex-col min-h-[360px] sm:min-h-[440px] lg:h-[560px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
           <div className="p-3.5 border-b border-stone-200/80 dark:border-white/[0.06] bg-stone-100/80 dark:bg-black/20 flex items-center justify-between">
             <span className="text-xs font-bold text-stone-800 dark:text-neutral-300 flex items-center gap-2">
               <Radio className="w-4 h-4 text-teal-700 dark:text-teal-400" />
@@ -523,9 +473,7 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
 
                 <div className="flex-1 text-xs min-w-0">
                   <div className="text-stone-900 dark:text-white font-semibold truncate font-bangla">
-                    {selectedSampleId
-                      ? SAMPLE_AUDIOS.find((s) => s.id === selectedSampleId)?.title
-                      : (language === 'en' ? 'Recorded Audio Track' : 'রেকর্ডকৃত বাংলা অডিও')}
+                    {language === 'en' ? 'Recorded / Uploaded Audio Track' : 'রেকর্ডকৃত বা আপলোডকৃত বাংলা অডিও'}
                   </div>
                   <div className="text-stone-500 dark:text-neutral-400 text-[11px] font-mono mt-0.5">
                     {audioMimeType}
@@ -553,7 +501,7 @@ export const VoiceWorkspace: React.FC<VoiceWorkspaceProps> = ({
         </div>
 
         {/* Right Side: Transcript Result */}
-        <div className="glass-panel rounded-2xl flex flex-col h-[560px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
+        <div className="glass-panel rounded-2xl flex flex-col min-h-[380px] sm:min-h-[440px] lg:h-[560px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
           <div className="p-3.5 border-b border-stone-200/80 dark:border-white/[0.06] bg-stone-100/80 dark:bg-black/20 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">

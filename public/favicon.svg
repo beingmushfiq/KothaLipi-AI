@@ -1,63 +1,77 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
   <defs>
-    <!-- Background Gradient -->
-    <radialGradient id="shobdoBg" cx="30%" cy="25%" r="85%">
+    <!-- Background Radial Gradient -->
+    <radialGradient id="kothaKaBg" cx="30%" cy="25%" r="85%">
       <stop offset="0%" stopColor="#0f1f33" />
       <stop offset="55%" stopColor="#081322" />
       <stop offset="100%" stopColor="#030810" />
     </radialGradient>
 
     <!-- Kinetic Teal to Cyan Soundwave Gradient -->
-    <linearGradient id="shobdoWaveGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+    <linearGradient id="kothaKaWaveGrad" x1="0%" y1="100%" x2="100%" y2="0%">
       <stop offset="0%" stopColor="#0d9488" />
       <stop offset="40%" stopColor="#14b8a6" />
       <stop offset="100%" stopColor="#38bdf8" />
     </linearGradient>
 
     <!-- Glowing Saffron Core Gradient -->
-    <linearGradient id="shobdoAccentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="kothaKaAccentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stopColor="#fef08a" />
       <stop offset="50%" stopColor="#f59e0b" />
       <stop offset="100%" stopColor="#ea580c" />
     </linearGradient>
 
     <!-- High-clarity Glow Filter -->
-    <filter id="shobdoGlow" x="-20%" y="-20%" width="140%" height="140%">
+    <filter id="kothaKaGlow" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="1.2" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
 
   <!-- Base Tile -->
-  <rect width="64" height="64" rx="16" fill="url(#shobdoBg)" />
+  <rect width="64" height="64" rx="16" fill="url(#kothaKaBg)" />
   <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="15.25" stroke="rgba(45, 212, 191, 0.28)" strokeWidth="1.5" />
 
-  <!-- Iconic 'শ' (Shobdo) Calligraphic-Waveform Glyph -->
-  <!-- 1. Top Matra/Shoulder -->
-  <line x1="33" y1="18" x2="49" y2="18" stroke="url(#shobdoWaveGrad)" strokeWidth="3.2" strokeLinecap="round" />
+  <!-- Iconic 'ক' (Ka / Kotha) Calligraphic-Waveform Glyph -->
+  <!-- 1. Top Matra (মাত্রা) -->
+  <line x1="13" y1="16" x2="51" y2="16" stroke="url(#kothaKaWaveGrad)" strokeWidth="3.4" strokeLinecap="round" />
 
-  <!-- 2. Vertical Anchor Stem -->
-  <line x1="45" y1="18" x2="45" y2="47" stroke="url(#shobdoWaveGrad)" strokeWidth="3.2" strokeLinecap="round" />
-
-  <!-- 3. Dual-Waveform Loops of 'শ' -->
-  <!-- Left Wave & Central Arch flowing continuously -->
+  <!-- 2. Left Triangular Body & Apex of 'ক' -->
   <path
-    d="M17 38 C17 26 27 25 27 34 C27 44 38 43 38 30 C38 21 45 20 45 20"
-    stroke="url(#shobdoWaveGrad)"
+    d="M37 16 L18 32 L28 47 L37 31"
+    stroke="url(#kothaKaWaveGrad)"
     strokeWidth="3.2"
     strokeLinecap="round"
     strokeLinejoin="round"
   />
 
-  <!-- 4. Inner Sound Pulse / Resonance Orb -->
-  <circle cx="22" cy="30" r="3.2" fill="url(#shobdoAccentGrad)" filter="url(#shobdoGlow)" />
+  <!-- 3. Vertical Anchor Stem of 'ক' -->
+  <line x1="37" y1="16" x2="37" y2="48" stroke="url(#kothaKaWaveGrad)" strokeWidth="3.4" strokeLinecap="round" />
 
-  <!-- 5. Acoustic Radiance Arcs (Voice & Word Broadcasting) -->
+  <!-- 4. Right Looping Wing of 'ক' -->
   <path
-    d="M50 27 C53 30 53 35 50 38"
+    d="M37 31 C46 28 50 36 45 42 C40.5 46.5 34 43 31 39"
+    stroke="url(#kothaKaWaveGrad)"
+    strokeWidth="3.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+
+  <!-- 5. Acoustic Core Orb at the Heart of 'ক' -->
+  <circle cx="28" cy="32" r="3.2" fill="url(#kothaKaAccentGrad)" filter="url(#kothaKaGlow)" />
+
+  <!-- 6. Acoustic Sound Waves Radiating Outward -->
+  <path
+    d="M48 26 C52 29 52 35 48 38"
     stroke="#38bdf8"
     strokeWidth="2.2"
     strokeLinecap="round"
-    opacity="0.9"
+  />
+  <path
+    d="M53 22 C59 27 59 39 53 44"
+    stroke="#38bdf8"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    opacity="0.5"
   />
 </svg>

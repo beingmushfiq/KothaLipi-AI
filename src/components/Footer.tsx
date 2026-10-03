@@ -23,11 +23,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateTab }) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-stone-200/80 dark:border-white/[0.08] bg-[#f2efe9] dark:bg-[#07090e] text-stone-600 dark:text-neutral-400 font-sans mt-auto transition-colors duration-300">
+    <footer className="border-t border-stone-200/80 dark:border-white/[0.08] bg-[#f2efe9] dark:bg-[#07090e] text-stone-600 dark:text-neutral-400 font-sans mt-auto transition-colors duration-300 pb-16 md:pb-0">
       {/* Upper Main Footer Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
-          {/* Column 1: Shobdo Brand Identity (4 cols) */}
+          {/* Column 1: KothaLipi Brand Identity (4 cols) */}
           <div className="lg:col-span-4 flex flex-col justify-between space-y-4">
             <div>
               <div className="flex items-center gap-3">
@@ -38,7 +38,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateTab }) => {
                       {t.brandName}
                     </span>
                     <span className="font-bangla-brand text-sm font-bold text-teal-700 dark:text-teal-400 leading-none">
-                      {language === 'en' ? 'শব্দ' : 'Shobdo'}
+                      {language === 'en' ? 'কথালিপি' : 'KothaLipi'}
                     </span>
                     <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-teal-500/10 text-teal-700 dark:bg-teal-400/15 dark:text-teal-300 border border-teal-500/25">
                       AI

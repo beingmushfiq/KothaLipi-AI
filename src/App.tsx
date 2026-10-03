@@ -8,6 +8,8 @@ import { WritingAssistant } from './components/WritingAssistant';
 import { VoiceWorkspace } from './components/VoiceWorkspace';
 import { HistoryDrawer } from './components/HistoryDrawer';
 import { Footer } from './components/Footer';
+import { MobileBottomNav } from './components/MobileBottomNav';
+import { PWAInstallButton } from './components/PWAInstallButton';
 import { ActiveTab, HistoryItem, OcrResult, ProofreadResult, TranscriptionResult } from './types';
 import { CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -208,8 +210,8 @@ function AppContent() {
         historyCount={historyItems.length}
       />
 
-      {/* Main Viewport Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      {/* Main Viewport Container with Mobile Bottom Nav Padding */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-28 md:pb-12">
         {/* Floating Toast Notification */}
         <AnimatePresence>
           {toastMessage && (
@@ -277,6 +279,16 @@ function AppContent() {
 
       {/* Comprehensive High-Grade Footer with DevCenterPoint Branding */}
       <Footer onNavigateTab={(tab) => setActiveTab(tab)} />
+
+      {/* Native-Feel Mobile Bottom Navigation Bar */}
+      <MobileBottomNav
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        historyCount={historyItems.length}
+      />
+
+      {/* Floating In-App Install Prompt Banner */}
+      <PWAInstallButton variant="floating" />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import http from 'http';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { GoogleGenAI } from '@google/genai';
@@ -607,10 +608,15 @@ app.post('/api/tts', async (req: Request, res: Response) => {
 
 // Setup Vite middlewares in development or serve static in production
 async function startServer() {
+  const httpServer = http.createServer(app);
+
   if (process.env.NODE_ENV !== 'production') {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: process.env.DISABLE_HMR === 'true' ? false : { server: httpServer },
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);
@@ -621,8 +627,8 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, () => {
-    console.log(`Bangla AI Toolkit server listening on http://localhost:${PORT}`);
+  httpServer.listen(PORT, () => {
+    console.log(`KothaLipi AI Toolkit server listening on http://localhost:${PORT}`);
   });
 }
 

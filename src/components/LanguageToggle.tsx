@@ -12,16 +12,16 @@ export const LanguageToggle: React.FC = () => {
       onClick={toggleLanguage}
       aria-label={language === 'en' ? 'Switch to Bengali' : 'Switch to English'}
       title={language === 'en' ? 'বাংলা ভাষায় পরিবর্তন করুন (Switch to Bengali)' : 'Switch to English (ইংরেজি ভাষায় পরিবর্তন করুন)'}
-      className="flex items-center gap-1.5 p-1 rounded-xl bg-stone-200/60 dark:bg-white/[0.04] border border-stone-300/70 dark:border-white/[0.08] hover:border-stone-400 dark:hover:border-white/[0.15] transition-all text-xs shadow-2xs group"
+      className="flex items-center gap-1 sm:gap-1.5 p-0.5 sm:p-1 rounded-xl bg-stone-200/60 dark:bg-white/[0.04] border border-stone-300/70 dark:border-white/[0.08] hover:border-stone-400 dark:hover:border-white/[0.15] transition-all duration-150 shadow-2xs group shrink-0 hover:scale-[1.02] active:scale-95 cursor-pointer select-none"
     >
-      <div className="flex items-center justify-center pl-1 text-stone-500 dark:text-neutral-400 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
-        <Globe className="w-3.5 h-3.5" />
+      <div className="flex items-center justify-center pl-0.5 sm:pl-1 text-stone-500 dark:text-neutral-400 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
+        <Globe className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
       </div>
 
       <div className="flex items-center relative p-0.5 rounded-lg">
         {/* EN option */}
         <div
-          className={`relative z-10 px-2 py-0.5 text-[11px] font-mono font-bold tracking-tight rounded-md transition-colors ${
+          className={`relative z-10 px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-[11px] font-mono font-bold tracking-tight rounded-md transition-colors ${
             language === 'en'
               ? 'text-stone-900 dark:text-white'
               : 'text-stone-500 dark:text-neutral-400 hover:text-stone-800 dark:hover:text-neutral-200'
@@ -39,7 +39,7 @@ export const LanguageToggle: React.FC = () => {
 
         {/* BN option */}
         <div
-          className={`relative z-10 px-2 py-0.5 text-[11px] font-bangla font-bold tracking-tight rounded-md transition-colors ${
+          className={`relative z-10 px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-[11px] font-bangla font-bold tracking-tight rounded-md transition-colors ${
             language === 'bn'
               ? 'text-stone-900 dark:text-white'
               : 'text-stone-500 dark:text-neutral-400 hover:text-stone-800 dark:hover:text-neutral-200'

@@ -244,7 +244,7 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap w-full sm:w-auto">
             <input
               type="file"
               ref={fileInputRef}
@@ -254,7 +254,7 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
             />
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-2 px-3.5 py-2.5 bg-white hover:bg-stone-100 text-stone-800 border-stone-300 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-neutral-200 text-xs sm:text-sm font-medium rounded-xl border dark:border-white/[0.08] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xs"
+              className="flex-1 sm:flex-initial justify-center flex items-center gap-2 px-3.5 py-2.5 bg-white hover:bg-stone-100 text-stone-800 border-stone-300 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-neutral-200 text-xs sm:text-sm font-medium rounded-xl border dark:border-white/[0.08] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xs"
             >
               <Upload className="w-4 h-4 text-teal-700 dark:text-teal-400" />
               <span>{t.ocrUploadBtn}</span>
@@ -262,7 +262,7 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
             <button
               onClick={runOcr}
               disabled={isLoading || !selectedImage}
-              className="flex items-center gap-2 px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white dark:bg-gradient-to-r dark:from-teal-500 dark:to-emerald-600 dark:hover:from-teal-400 dark:hover:to-emerald-500 disabled:opacity-40 dark:text-neutral-950 font-semibold text-xs sm:text-sm rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="flex-1 sm:flex-initial justify-center flex items-center gap-2 px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white dark:bg-gradient-to-r dark:from-teal-500 dark:to-emerald-600 dark:hover:from-teal-400 dark:hover:to-emerald-500 disabled:opacity-40 dark:text-neutral-950 font-semibold text-xs sm:text-sm rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               {isLoading ? (
                 <>
@@ -394,7 +394,7 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
       {/* Main Studio Viewport */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         {/* Left Side: Document Viewer */}
-        <div className="glass-panel rounded-2xl overflow-hidden flex flex-col h-[650px] border border-stone-200/90 dark:border-white/[0.07]">
+        <div className="glass-panel rounded-2xl overflow-hidden flex flex-col h-[340px] sm:h-[460px] lg:h-[650px] border border-stone-200/90 dark:border-white/[0.07]">
           {/* Viewer Toolbar */}
           <div className="p-3.5 border-b border-stone-200/80 dark:border-white/[0.06] bg-stone-100/80 dark:bg-black/20 flex items-center justify-between">
             <span className="text-xs font-semibold text-stone-800 dark:text-neutral-300 flex items-center gap-2">
@@ -460,7 +460,7 @@ export const OcrWorkspace: React.FC<OcrWorkspaceProps> = ({
         </div>
 
         {/* Right Side: Linguistic Extraction */}
-        <div className="glass-panel rounded-2xl flex flex-col h-[650px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
+        <div className="glass-panel rounded-2xl flex flex-col min-h-[380px] lg:h-[650px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
           {/* Output Toolbar */}
           <div className="p-3.5 border-b border-stone-200/80 dark:border-white/[0.06] bg-stone-100/80 dark:bg-black/20 flex items-center justify-between">
             <div className="flex items-center gap-2.5">

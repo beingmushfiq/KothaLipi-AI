@@ -428,12 +428,12 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap w-full sm:w-auto">
             <button
               type="button"
               onClick={handleSummarize}
               disabled={isSummarizing || !inputText.trim()}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-stone-50 text-stone-800 border border-stone-300 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-neutral-200 dark:border-white/[0.08] font-semibold text-xs sm:text-sm rounded-xl shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40"
+              className="flex-1 sm:flex-initial justify-center flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-stone-50 text-stone-800 border border-stone-300 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:text-neutral-200 dark:border-white/[0.08] font-semibold text-xs sm:text-sm rounded-xl shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40"
               title={language === 'en' ? 'Generate AI concise summary in side-panel' : 'সাইড-প্যানেলে এআই সারসংক্ষেপ তৈরি করুন'}
             >
               {isSummarizing ? (
@@ -452,7 +452,7 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
             <button
               onClick={() => runProofread(mode)}
               disabled={isLoading || !inputText.trim()}
-              className="flex items-center gap-2 px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white dark:bg-gradient-to-r dark:from-teal-500 dark:to-emerald-600 dark:hover:from-teal-400 dark:hover:to-emerald-500 disabled:opacity-40 dark:text-neutral-950 font-semibold text-xs sm:text-sm rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="flex-1 sm:flex-initial justify-center flex items-center gap-2 px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white dark:bg-gradient-to-r dark:from-teal-500 dark:to-emerald-600 dark:hover:from-teal-400 dark:hover:to-emerald-500 disabled:opacity-40 dark:text-neutral-950 font-semibold text-xs sm:text-sm rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               {isLoading ? (
                 <>
@@ -741,7 +741,7 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         {/* Left Side: Input Text Editor */}
         <div className="space-y-3.5">
-          <div className="glass-panel rounded-2xl flex flex-col h-[520px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
+          <div className="glass-panel rounded-2xl flex flex-col min-h-[300px] sm:min-h-[380px] lg:h-[560px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
             <div className="p-3.5 border-b border-stone-200/80 dark:border-white/[0.06] bg-stone-100/80 dark:bg-black/20 flex items-center justify-between">
               <span className="text-xs font-bold text-stone-800 dark:text-neutral-300 flex items-center gap-2">
                 <AlignLeft className="w-4 h-4 text-teal-700 dark:text-teal-400" />
@@ -771,7 +771,7 @@ export const WritingAssistant: React.FC<WritingAssistantProps> = ({
         </div>
 
         {/* Right Side: Polished Output & Rule Changes */}
-        <div className="glass-panel rounded-2xl flex flex-col h-[600px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
+        <div className="glass-panel rounded-2xl flex flex-col min-h-[360px] sm:min-h-[440px] lg:h-[600px] overflow-hidden border border-stone-200/90 dark:border-white/[0.07]">
           <div className="p-3.5 border-b border-stone-200/80 dark:border-white/[0.06] bg-stone-100/80 dark:bg-black/20 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">

@@ -1,8 +1,12 @@
 <div align="center">
 
-# Shobdo · শব্দ
-### The Bengali Word, Vision & Voice Engine
-**বাংলা শব্দ, লিপি ও কণ্ঠস্বর বুদ্ধিমত্তা প্ল্যাটফর্ম**
+<p align="center">
+  <img src="public/logo.svg" alt="KothaLipi Logo" width="380" />
+</p>
+
+# KothaLipi · কথালিপি
+### The Bengali Voice, Vision & Writing Engine
+**বাংলা কণ্ঠস্বর, লিপি ও লেখনী বুদ্ধিমত্তা প্ল্যাটফর্ম**
 
 [![DevCenterPoint](https://img.shields.io/badge/Engineered%20by-DevCenterPoint-2563eb?style=for-the-badge&logo=google-cloud&logoColor=white)](https://devcenterpoint.com)
 [![React 19](https://img.shields.io/badge/React%2019-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev)
@@ -10,6 +14,7 @@
 [![Gemini 2.5](https://img.shields.io/badge/Powered%20by-Gemini%202.5%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind%20CSS%20v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Firebase Firestore](https://img.shields.io/badge/Cloud%20Sync-Firebase%20Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
+[![PWA Ready](https://img.shields.io/badge/PWA-Installable%20Mobile%20App-0f766e?style=for-the-badge&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 
 <p align="center">
   <a href="https://devcenterpoint.com">
@@ -28,25 +33,33 @@
 
 ## 📖 Overview
 
-In the Bengali language, the word **“শব্দ” (Shobdo)** holds a unique dual identity: it represents both the **written word** (*lexicon, orthography, script*) and the **acoustic sound** (*voice, phonemes, resonance*).
+In the Bengali linguistic tradition, **KothaLipi (কথালিপি)** represents the seamless fusion of two fundamental expressive realms:
+* **কথা (Kotha)**: The spoken voice, acoustic phonetics, conversation, and oral dialects.
+* **লিপি (Lipi)**: The written word, typography, calligraphic manuscripts, and orthographic documentation.
 
-**Shobdo** is a production-grade multimodal Bengali intelligence workspace designed to handle the linguistic complexities of Bengali across text, vision, and speech:
-1. **👁️ Vision OCR (নথি পাঠ)**: High-precision document OCR for historical manuscripts, legal deeds, government gazettes, and Rabindric handwriting with complex conjunct (যুক্তবর্ণ) preservation.
-2. **✍️ Writing Studio (শুদ্ধ লেখনী)**: Grammar and orthography assistant enforcing Bangla Academy Promito standards, bidirectional Sadhu ⇄ Cholit conversion, 9 tonal adaptations, and animated typewriter streaming.
-3. **🎙️ Voice to Text (কণ্ঠস্বর)**: Acoustic speech-to-text transcription trained on colloquial regional accents (Sylhet, Chittagong, Noakhali), speaker diarization with timestamps, and automated executive takeaways.
+**KothaLipi** is a production-grade multimodal Bengali intelligence workspace designed to handle the full linguistic spectrum of Bengali across voice, vision, and text:
+1. **🎙️ Voice to Text (কণ্ঠস্বর)**: Acoustic speech-to-text transcription trained on colloquial regional accents (Sylhet, Chittagong, Noakhali, Dhaka), speaker diarization with timestamps, and automated executive takeaways.
+2. **👁️ Vision OCR (নথি পাঠ)**: High-precision document OCR for historical manuscripts, legal deeds, government gazettes, and cursive handwriting with complex conjunct (যুক্তবর্ণ) preservation.
+3. **✍️ Writing Studio (শুদ্ধ লেখনী)**: Grammar and orthography assistant enforcing Bangla Academy Promito standards, bidirectional Sadhu ⇄ Cholit conversion, 9 tonal adaptations, and animated typewriter streaming.
 4. **🗃️ Cloud Archive Vault (হিস্ট্রি)**: Seamless persistent cross-session history powered by Google Firebase Firestore with Google Authentication.
 
 ---
 
 ## ⚡ Key Workspaces & Capabilities
 
-### 1. Vision OCR (নথি পাঠ ও লিপি পুনর্গঠন)
+### 1. Voice to Text & Diarization (কণ্ঠস্বর ও উপভাষা)
+* **Regional Dialect Normalization**: Accurately transcribes colloquial speech from Sylhet, Chittagong, Noakhali, and Standard Dhaka Bengali into standardized modern Bengali as well as verbatim phonetic transcripts.
+* **Speaker Diarization**: Separates multi-person conversations with estimated turn timestamps.
+* **Audio Executive Briefings**: Generates synthesized summaries and actionable items from recorded voice notes.
+* **In-Browser Audio Recording**: Record directly via microphone or upload `.mp3`, `.wav`, `.m4a`, `.ogg`, and `.webm` files.
+
+### 2. Vision OCR (নথি পাঠ ও লিপি পুনর্গঠন)
 * **Historical & Archival OCR**: Recognizes degraded print, microfilms, weathered deed stamps, and cursive manuscripts.
 * **Complex Conjunct Preservation**: Retains intricate ligatures (e.g., `ক্ষ`, `জ্ঞ`, `ব্র`, `হ্ম`) without character dropping or split diacritics.
 * **Tabular & Field Extraction**: Intelligently parses structured documents (NIDs, passports, land records, invoices) into JSON key-value pairs.
 * **Dual-Language & Confidence Scoring**: Detects mixed Bengali-English text with localized confidence metrics.
 
-### 2. Writing Studio & Grammar Engine (শুদ্ধ লেখনী)
+### 3. Writing Studio & Grammar Engine (শুদ্ধ লেখনী)
 * **Bangla Academy Standard Proofreader**: Real-time orthographic correction for spelling, vowel harmony, and punctuation.
 * **Bidirectional Sadhu ⇄ Cholit**: Seamless transformation between formal classical prose (*সাধু ভাষা*) and modern standard colloquial (*চলিত ভাষা*).
 * **Multi-Tone Stylistic Rephrasing**: Instant adaptation to Professional/Formal, Literary, Academic, Persuasive, Conversational, or Concise styles.
@@ -54,14 +67,14 @@ In the Bengali language, the word **“শব্দ” (Shobdo)** holds a unique
 * **Built-in Virtual Avro Keyboard**: In-browser phonetic typing and visual Bengali on-screen keyboard.
 * **Long-Form Summarizer**: Extracts core themes, bulleted takeaways, and compression ratios from lengthy essays.
 
-### 3. Voice to Text & Diarization (কণ্ঠস্বর ও উপভাষা)
-* **Regional Dialect Alignment**: Accurately transcribes colloquial speech from Sylhet, Chittagong, Noakhali, and Standard Dhaka Bengali.
-* **Speaker Diarization**: Separates multi-person conversations with estimated turn timestamps.
-* **Audio Executive Briefings**: Generates synthesized summaries and actionable items from recorded voice notes.
-* **In-Browser Audio Recording**: Record directly via microphone or upload `.mp3`, `.wav`, `.m4a`, `.ogg`, and `.webm` files.
-
 ### 4. Multi-Format Export Studio
 * Export any output instantly as **PDF Document (.pdf)**, **Microsoft Word (.docx)**, **Markdown (.md)**, or **Plain Text (.txt)**.
+
+### 5. 📱 Progressive Web App (PWA) & Mobile Native Architecture
+* **Native-Feel App Installation**: One-click install prompt for Android/Chromium and guided Add-to-Home-Screen sheet for iOS Safari.
+* **Thumb-Friendly Bottom Navigation**: Dedicated mobile navigation dock with tactile active indicators and safe-area padding (`env(safe-area-inset-bottom)`).
+* **Responsive Breakpoints**: Seamless fluid layout adapting across phones (320px–480px), tablets (768px), and desktops (1024px+).
+* **Offline Asset Caching**: Workbox service worker precaches application shell, web fonts, and core assets.
 
 ---
 
@@ -69,7 +82,7 @@ In the Bengali language, the word **“শব্দ” (Shobdo)** holds a unique
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│               Shobdo Client (React 19 + Vite 8)        │
+│              KothaLipi Client (React 19 + Vite 8)      │
 │  - Tailwind CSS v4 + Motion + GSAP                     │
 │  - Outfit & Anek Bangla Typography                     │
 │  - Bilingual Context Engine (English / বাংলা)          │
@@ -89,6 +102,7 @@ In the Bengali language, the word **“শব্দ” (Shobdo)** holds a unique
 
 | Layer | Technologies |
 |---|---|
+| **Brand Identity** | **KothaLipi (কথালিপি)** — *Voice, Vision & Script Engine* |
 | **Frontend** | React 19, TypeScript 5, Vite 8, Tailwind CSS v4, Motion, GSAP, Lucide Icons |
 | **Backend** | Node.js, Express, tsx, CORS |
 | **AI Models** | `@google/genai` TypeScript SDK (`gemini-2.5-flash`) |
@@ -108,8 +122,8 @@ In the Bengali language, the word **“শব্দ” (Shobdo)** holds a unique
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/shobdo-bengali-ai.git
-cd shobdo-bengali-ai
+git clone https://github.com/your-username/kothalipi-bengali-ai.git
+cd kothalipi-bengali-ai
 ```
 
 ### 2. Install Dependencies

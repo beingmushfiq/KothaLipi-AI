@@ -479,7 +479,7 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
       {/* Full Outcome Modal Dialog */}
       <AnimatePresence>
         {selectedOutcomeItem && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 overflow-y-auto">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -495,7 +495,7 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: 'spring', duration: 0.3 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-[#fbfaf5] dark:bg-[#0c1017] rounded-3xl border border-stone-200 dark:border-white/[0.1] shadow-2xl z-50 flex flex-col overflow-hidden"
+              className="relative w-full max-w-4xl max-h-[94vh] bg-[#fbfaf5] dark:bg-[#0c1017] rounded-2xl sm:rounded-3xl border border-stone-200 dark:border-white/[0.1] shadow-2xl z-50 flex flex-col overflow-hidden"
             >
               {/* Modal Header */}
               <div className="p-5 sm:p-6 border-b border-stone-200/90 dark:border-white/[0.08] flex items-center justify-between gap-4 bg-stone-100/70 dark:bg-white/[0.02]">

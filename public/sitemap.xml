@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <!-- Primary Homepage & Shobdo Studio Hub -->
+  <!-- Primary Homepage & KothaLipi Studio Hub -->
   <url>
     <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/</loc>
     <lastmod>2026-10-03</lastmod>
@@ -12,9 +12,9 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/" />
     <image:image>
-      <image:loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/favicon.svg</image:loc>
-      <image:title>Shobdo (শব্দ) Wavemark Logo</image:title>
-      <image:caption>Shobdo – The Bengali Word, Vision &amp; Voice Engine</image:caption>
+      <image:loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/logo.svg</image:loc>
+      <image:title>KothaLipi (কথালিপি) Logo</image:title>
+      <image:caption>KothaLipi – The Bengali Voice, Vision &amp; Writing Engine</image:caption>
     </image:image>
   </url>
 
