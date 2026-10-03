@@ -1,0 +1,8 @@
+{
+  "name": "Bangla AI Toolkit - বাংলা এআই টুলকিট",
+  "description": "Comprehensive AI suite for Bengali: High-precision Bangla OCR for scanned documents, writing & proofreading assistant with Sadhu-Cholit conversion, and voice-to-text audio transcription.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Primary Homepage & Shobdo Studio Hub -->
+  <url>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/" />
+    <image:image>
+      <image:loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/favicon.svg</image:loc>
+      <image:title>Shobdo (শব্দ) Wavemark Logo</image:title>
+      <image:caption>Shobdo – The Bengali Word, Vision &amp; Voice Engine</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Workspace 1: Vision OCR (নথি পাঠ) -->
+  <url>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#ocr</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#ocr" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#ocr" />
+  </url>
+
+  <!-- Workspace 2: Writing Studio (শুদ্ধ লেখনী) -->
+  <url>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#writer</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#writer" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#writer" />
+  </url>
+
+  <!-- Workspace 3: Voice to Text (কণ্ঠস্বর) -->
+  <url>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#voice</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#voice" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#voice" />
+  </url>
+
+  <!-- Workspace 4: History Archive (হিস্ট্রি) -->
+  <url>
+    <loc>https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#history</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#history" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/#history" />
+  </url>
+</urlset>

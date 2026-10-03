@@ -1,0 +1,25 @@
+# Robots.txt for Bangla AI Studio
+User-agent: *
+Allow: /
+
+# Search & Generative AI Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Sitemap Index Reference
+Sitemap: https://ais-pre-vk7faxeuolrv2lo3madx7b-18937855618.asia-southeast1.run.app/sitemap.xml
