@@ -13,6 +13,44 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// The built SPA can sit at different paths depending on how the host is wired
+// up (cPanel "Application Root" varies and the process CWD is not guaranteed to
+// be the project root), so probe the likely locations instead of assuming
+// __dirname/dist. A candidate only counts if index.html is a BUILT shell — the
+// Vite source index.html also exists at the repo root and references
+// /src/main.tsx, which would break if served.
+function isBuiltShell(dir: string): boolean {
+  const file = path.join(dir, 'index.html');
+  if (!fs.existsSync(file)) return false;
+  try {
+    return !fs.readFileSync(file, 'utf8').includes('/src/main');
+  } catch {
+    return false;
+  }
+}
+
+const DIST_CANDIDATES = [
+  path.join(__dirname, 'dist'),
+  path.join(process.cwd(), 'dist'),
+  __dirname,
+  process.cwd(),
+  ...(process.env.DOCUMENT_ROOT
+    ? [process.env.DOCUMENT_ROOT, path.join(process.env.DOCUMENT_ROOT, 'dist')]
+    : []),
+  path.join(__dirname, '..', 'public_html', 'dist'),
+  path.join(__dirname, '..', 'public_html'),
+];
+
+const CLIENT_DIR = DIST_CANDIDATES.find(isBuiltShell);
+
+if (!CLIENT_DIR) {
+  console.warn(
+    '[KothaLipi] Could not locate a built SPA shell. Looked in:\n' +
+      DIST_CANDIDATES.map((d) => `  - ${d}`).join('\n') +
+      '\nSet the cPanel "Application Root" to the repo directory so that dist/ resolves.',
+  );
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -801,8 +839,11 @@ function buildRouteHtml(route: string, templatePath: string): string | null {
 // SEO: Sitemap.xml route supporting dynamic domain resolution
 app.get('/sitemap.xml', (_req: Request, res: Response) => {
   const sitemapCandidates = [
+    ...(CLIENT_DIR ? [path.join(CLIENT_DIR, 'sitemap.xml')] : []),
     path.join(__dirname, 'public', 'sitemap.xml'),
     path.join(__dirname, 'dist', 'sitemap.xml'),
+    path.join(process.cwd(), 'public', 'sitemap.xml'),
+    path.join(process.cwd(), 'dist', 'sitemap.xml'),
   ];
   const sitemapPath = sitemapCandidates.find((p) => fs.existsSync(p));
 
@@ -834,8 +875,21 @@ async function startServer() {
       appType: 'spa',
     });
     app.use(vite.middlewares);
+  } else if (!CLIENT_DIR) {
+    // Don't fail silently: make the misconfiguration obvious in both the log
+    // and the HTTP response so it can be fixed without guessing.
+    app.use((_req: Request, res: Response) => {
+      console.error('[KothaLipi] No built SPA shell found — cannot serve the app.');
+      res
+        .status(503)
+        .type('text/plain')
+        .send(
+          'KothaLipi AI could not start: the built client (dist/index.html) was not found.\n' +
+            'On cPanel, set the Node.js App "Application Root" to the project directory so dist/ resolves, then restart.',
+        );
+    });
   } else {
-    const distDir = path.join(__dirname, 'dist');
+    const distDir = CLIENT_DIR;
     const templatePath = path.join(distDir, 'index.html');
 
     // Serve the SPA shell with per-route <head> metadata so each workspace is
@@ -843,7 +897,7 @@ async function startServer() {
     // takes precedence over the raw index.html on the root path.
     app.get(SITE_ROUTES, (req: Request, res: Response) => {
       const html = buildRouteHtml(req.path.replace(/\/+$/, '') || '/', templatePath);
-      if (!html) return res.status(500).send('Application shell unavailable');
+      if (!html) return res.status(503).send('Application shell unavailable');
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
       res.send(html);
@@ -857,6 +911,9 @@ async function startServer() {
 
   httpServer.listen(PORT, () => {
     console.log(`KothaLipi AI Toolkit server listening on http://localhost:${PORT}`);
+    console.log(`  cwd:        ${process.cwd()}`);
+    console.log(`  __dirname:  ${__dirname}`);
+    console.log(`  CLIENT_DIR: ${CLIENT_DIR ?? '<not found>'}`);
   });
 }
 

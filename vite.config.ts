@@ -51,6 +51,13 @@ export default defineConfig(() => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+          // The SPA navigation fallback must not swallow requests for real
+          // files. Without this, typing /sitemap.xml or /robots.txt in the
+          // address bar is treated as an app route and the cached index.html
+          // is served instead of the actual file served by the Node server.
+          // All genuine app routes are extension-less (/ocr, /writer, /voice,
+          // /history), so denylisting any dotted path is safe.
+          navigateFallbackDenylist: [/^\/api\//, /\.[a-zA-Z0-9]+$/],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

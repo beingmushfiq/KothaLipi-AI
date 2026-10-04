@@ -9,6 +9,30 @@ import { fileURLToPath } from "url";
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+function isBuiltShell(dir) {
+  const file = path.join(dir, "index.html");
+  if (!fs.existsSync(file)) return false;
+  try {
+    return !fs.readFileSync(file, "utf8").includes("/src/main");
+  } catch {
+    return false;
+  }
+}
+const DIST_CANDIDATES = [
+  path.join(__dirname, "dist"),
+  path.join(process.cwd(), "dist"),
+  __dirname,
+  process.cwd(),
+  ...process.env.DOCUMENT_ROOT ? [process.env.DOCUMENT_ROOT, path.join(process.env.DOCUMENT_ROOT, "dist")] : [],
+  path.join(__dirname, "..", "public_html", "dist"),
+  path.join(__dirname, "..", "public_html")
+];
+const CLIENT_DIR = DIST_CANDIDATES.find(isBuiltShell);
+if (!CLIENT_DIR) {
+  console.warn(
+    "[KothaLipi] Could not locate a built SPA shell. Looked in:\n" + DIST_CANDIDATES.map((d) => `  - ${d}`).join("\n") + '\nSet the cPanel "Application Root" to the repo directory so that dist/ resolves.'
+  );
+}
 const app = express();
 const PORT = process.env.PORT || 3e3;
 app.use(cors());
@@ -669,8 +693,11 @@ function buildRouteHtml(route, templatePath) {
 }
 app.get("/sitemap.xml", (_req, res) => {
   const sitemapCandidates = [
+    ...CLIENT_DIR ? [path.join(CLIENT_DIR, "sitemap.xml")] : [],
     path.join(__dirname, "public", "sitemap.xml"),
-    path.join(__dirname, "dist", "sitemap.xml")
+    path.join(__dirname, "dist", "sitemap.xml"),
+    path.join(process.cwd(), "public", "sitemap.xml"),
+    path.join(process.cwd(), "dist", "sitemap.xml")
   ];
   const sitemapPath = sitemapCandidates.find((p) => fs.existsSync(p));
   if (sitemapPath) {
@@ -698,12 +725,19 @@ async function startServer() {
       appType: "spa"
     });
     app.use(vite.middlewares);
+  } else if (!CLIENT_DIR) {
+    app.use((_req, res) => {
+      console.error("[KothaLipi] No built SPA shell found \u2014 cannot serve the app.");
+      res.status(503).type("text/plain").send(
+        'KothaLipi AI could not start: the built client (dist/index.html) was not found.\nOn cPanel, set the Node.js App "Application Root" to the project directory so dist/ resolves, then restart.'
+      );
+    });
   } else {
-    const distDir = path.join(__dirname, "dist");
+    const distDir = CLIENT_DIR;
     const templatePath = path.join(distDir, "index.html");
     app.get(SITE_ROUTES, (req, res) => {
       const html = buildRouteHtml(req.path.replace(/\/+$/, "") || "/", templatePath);
-      if (!html) return res.status(500).send("Application shell unavailable");
+      if (!html) return res.status(503).send("Application shell unavailable");
       res.setHeader("Content-Type", "text/html; charset=utf-8");
       res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
       res.send(html);
@@ -715,6 +749,9 @@ async function startServer() {
   }
   httpServer.listen(PORT, () => {
     console.log(`KothaLipi AI Toolkit server listening on http://localhost:${PORT}`);
+    console.log(`  cwd:        ${process.cwd()}`);
+    console.log(`  __dirname:  ${__dirname}`);
+    console.log(`  CLIENT_DIR: ${CLIENT_DIR ?? "<not found>"}`);
   });
 }
 startServer().catch((err) => {
