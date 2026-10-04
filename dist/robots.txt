@@ -1,0 +1,41 @@
+# Robots.txt for KothaLipi AI (কথালিপি এআই) - Bengali Intelligence Suite
+User-agent: *
+Allow: /
+
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Generative AI & Answer Engine Crawlers (AEO / GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Sitemap Index Reference
+Sitemap: https://kothalipi.devcenterpoint.com/sitemap.xml

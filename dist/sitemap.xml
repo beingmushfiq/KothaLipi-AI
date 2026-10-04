@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- KothaLipi AI - কথালিপি এআই: Bengali Intelligence Suite -->
+
+  <!-- 1. Primary Hub & Home -->
+  <url>
+    <loc>https://kothalipi.devcenterpoint.com/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://kothalipi.devcenterpoint.com/?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://kothalipi.devcenterpoint.com/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kothalipi.devcenterpoint.com/" />
+    <image:image>
+      <image:loc>https://kothalipi.devcenterpoint.com/logo.svg</image:loc>
+      <image:title>KothaLipi AI Logo</image:title>
+      <image:caption>KothaLipi AI - Bengali Intelligence Suite</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://kothalipi.devcenterpoint.com/pwa-512x512.png</image:loc>
+      <image:title>KothaLipi AI</image:title>
+      <image:caption>Bangla OCR, proofreading and voice-to-text AI suite</image:caption>
+    </image:image>
+  </url>
+
+  <!-- 2. Workspace: Vision OCR (নথি পাঠ - স্ক্যান করা দলিল ও পাণ্ডুলিপি রূপান্তর) -->
+  <url>
+    <loc>https://kothalipi.devcenterpoint.com/ocr</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://kothalipi.devcenterpoint.com/ocr?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://kothalipi.devcenterpoint.com/ocr?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kothalipi.devcenterpoint.com/ocr" />
+  </url>
+
+  <!-- 3. Workspace: Writing Assistant & Proofreading Studio (শুদ্ধ লেখনী ও ব্যাকরণ) -->
+  <url>
+    <loc>https://kothalipi.devcenterpoint.com/writer</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://kothalipi.devcenterpoint.com/writer?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://kothalipi.devcenterpoint.com/writer?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kothalipi.devcenterpoint.com/writer" />
+  </url>
+
+  <!-- 4. Workspace: Voice Transcription & Speech-to-Text (কণ্ঠস্বর - অডিও প্রতিলিপি) -->
+  <url>
+    <loc>https://kothalipi.devcenterpoint.com/voice</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://kothalipi.devcenterpoint.com/voice?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://kothalipi.devcenterpoint.com/voice?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kothalipi.devcenterpoint.com/voice" />
+  </url>
+
+  <!-- 5. Workspace: Activity & Cloud Sync History Archive (হিস্ট্রি ও সংরক্ষণাগার) -->
+  <url>
+    <loc>https://kothalipi.devcenterpoint.com/history</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://kothalipi.devcenterpoint.com/history?lang=bn" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://kothalipi.devcenterpoint.com/history?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kothalipi.devcenterpoint.com/history" />
+  </url>
+
+</urlset>

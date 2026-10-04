@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="bn" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Runtime constraint: Ignore Vite HMR WebSocket connection warnings in AI Studio preview iframe
+      (function() {
+        const _origError = console.error;
+        const _origWarn = console.warn;
+        console.error = function(...args) {
+          if (args[0] && typeof args[0] === 'string' && (args[0].includes('[vite]') || args[0].includes('WebSocket') || args[0].includes('ws:'))) {
+            return;
+          }
+          _origError.apply(console, args);
+        };
+        console.warn = function(...args) {
+          if (args[0] && typeof args[0] === 'string' && (args[0].includes('[vite]') || args[0].includes('WebSocket') || args[0].includes('ws:'))) {
+            return;
+          }
+          _origWarn.apply(console, args);
+        };
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+    
+    <!-- Primary Page Title (SEO, Branding & Synchronization) -->
+    <title>KothaLipi AI - কথালিপি এআই: Bengali Intelligence Suite</title>
+    
+    <!-- Favicons & Native App Icons (PWA & iOS Safari) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
+    <meta name="theme-color" content="#0f766e" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="KothaLipi AI" />
+ 
+    <!-- Meta Description & Targeted Multilingual Keywords (SEO) -->
+    <meta
+      name="description"
+      content="Comprehensive AI suite for Bengali: High-precision Bangla OCR for scanned documents, writing & proofreading assistant with Sadhu-Cholit conversion, and voice-to-text audio transcription."
+    />
+    <meta
+      name="keywords"
+      content="KothaLipi, KothaLipi AI, কথালিপি, কথালিপি এআই, DevCenterPoint, Bangla AI, Bangla OCR, Bangla translator, বাংলা ওসিআর, বাংলা অনুবাদক, voice transcribe, Bangla voice to text, Bangla AI Toolkit, বাংলা এআই টুলকিট, বাংলা শব্দ, বাংলা লিপি, Bengali OCR, Bengali translator, Bengali voice transcription, speech to text Bangla, Sadhu to Cholit, সাধু চলিত রূপান্তর, Bangla proofreader, বাংলা ব্যাকরণ, Bangla Academy spelling, Sylheti voice transcription, Chittagonian dialect AI, Bengali document scanner"
+    />
+    <meta name="author" content="DevCenterPoint" />
+    <meta name="creator" content="DevCenterPoint" />
+    <meta name="publisher" content="DevCenterPoint" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta http-equiv="content-language" content="bn, en" />
+ 
+    <!-- Canonical and Multi-Regional Hreflang Tags (SEO & GEO) -->
+    <link rel="canonical" href="https://kothalipi.devcenterpoint.com/" />
+    <link rel="alternate" hreflang="bn" href="https://kothalipi.devcenterpoint.com/?lang=bn" />
+    <link rel="alternate" hreflang="en" href="https://kothalipi.devcenterpoint.com/?lang=en" />
+    <link rel="alternate" hreflang="x-default" href="https://kothalipi.devcenterpoint.com/" />
+
+    <!-- Geographic & Regional Metadata (GEO - Geographic Engine Optimization) -->
+    <meta name="geo.region" content="BD-13, IN-WB" />
+    <meta name="geo.placename" content="Dhaka, Bangladesh; Kolkata, West Bengal, India" />
+    <meta name="geo.position" content="23.8103;90.4125" />
+    <meta name="ICBM" content="23.8103, 90.4125" />
+    <meta name="DC.title" content="KothaLipi AI - কথালিপি এআই: Bengali Intelligence Suite" />
+    <meta name="DC.creator" content="DevCenterPoint" />
+    <meta name="DC.subject" content="Bengali Natural Language Processing, OCR, Voice-to-Text" />
+    <meta name="DC.description" content="Intelligent Bengali voice, vision and writing suite powered by modern multimodal AI." />
+    <meta name="DC.language" content="bn, en" />
+    <meta name="DC.coverage" content="Bangladesh, West Bengal, Worldwide Bengali Community" />
+ 
+    <!-- OpenGraph Social Sharing Cards (SEO & Social Discovery) -->
+    <meta property="og:site_name" content="KothaLipi AI - কথালিপি এআই: Bengali Intelligence Suite" />
+    <meta property="og:title" content="KothaLipi AI - কথালিপি এআই: Bengali Intelligence Suite" />
+    <meta
+      property="og:description"
+      content="Comprehensive AI suite for Bengali: High-precision Bangla OCR for scanned documents, writing & proofreading assistant with Sadhu-Cholit conversion, and voice-to-text audio transcription."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://kothalipi.devcenterpoint.com/" />
+    <meta property="og:image" content="https://kothalipi.devcenterpoint.com/pwa-512x512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="KothaLipi AI - Bengali Intelligence Suite logo" />
+    <meta property="og:locale" content="bn_BD" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="bn_IN" />
+ 
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@KothaLipiAI" />
+    <meta name="twitter:title" content="KothaLipi AI - কথালিপি এআই: Bengali Intelligence Suite" />
+    <meta
+      name="twitter:description"
+      content="Comprehensive AI suite for Bengali: High-precision Bangla OCR for scanned documents, writing & proofreading assistant with Sadhu-Cholit conversion, and voice-to-text audio transcription."
+    />
+    <meta name="twitter:image" content="https://kothalipi.devcenterpoint.com/pwa-512x512.png" />
+    <meta name="twitter:image:alt" content="KothaLipi AI - Bengali Intelligence Suite" />
+
+    <!-- Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Tiro+Bangla:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- SEO, AEO (Answer Engine Optimization) & GEO Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://kothalipi.devcenterpoint.com/#website",
+          "url": "https://kothalipi.devcenterpoint.com/",
+          "name": "KothaLipi AI",
+          "alternateName": "কথালিপি এআই",
+          "inLanguage": ["bn", "en"],
+          "publisher": { "@id": "https://kothalipi.devcenterpoint.com/#org" }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://kothalipi.devcenterpoint.com/#webapp",
+          "name": "KothaLipi AI",
+          "alternateName": "কথালিপি এআই",
+          "url": "https://kothalipi.devcenterpoint.com/",
+          "isPartOf": { "@id": "https://kothalipi.devcenterpoint.com/#website" },
+          "publisher": { "@id": "https://kothalipi.devcenterpoint.com/#org" },
+          "applicationCategory": "UtilitiesApplication, BusinessApplication, ProductivityApplication",
+          "applicationSubCategory": "Bengali Natural Language Processing & OCR Engine",
+          "operatingSystem": "All modern browsers, Windows, macOS, Android, iOS, Linux",
+          "browserRequirements": "Requires JavaScript. Requires HTML5 Audio API for speech recording.",
+          "softwareVersion": "1.2.0",
+          "inLanguage": ["bn", "en"],
+          "description": "Comprehensive AI suite for Bengali: High-precision Bangla OCR for scanned documents, writing & proofreading assistant with Sadhu-Cholit conversion, and voice-to-text audio transcription.",
+          "featureList": [
+            "Vision OCR: High-precision Bengali Scanned Document & Cursive Manuscript OCR with Ligature (যুক্তবর্ণ) Preservation",
+            "Structured Document Field Extraction for Bengali NID, Land Deeds, Invoices & Certificates",
+            "Writing Assistant: Bangla Academy Standard Spelling & Grammar Proofreading",
+            "Bidirectional Tone & Style Transformer: Sadhu to Cholit & Cholit to Sadhu",
+            "Voice to Text: Acoustic Regional Dialect Transcription (Sylheti, Chittagonian, Dhakaiya)",
+            "Speaker Diarization, Audio Playback & Speed Controls",
+            "Offline-Ready Progressive Web App (PWA) with Service Worker Caching",
+            "Google Authentication & Firebase Cloud Sync for Secure History Management"
+          ],
+          "screenshot": "https://kothalipi.devcenterpoint.com/pwa-512x512.png",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://kothalipi.devcenterpoint.com/#org",
+          "name": "DevCenterPoint",
+          "alternateName": "KothaLipi AI Labs",
+          "url": "https://devcenterpoint.com",
+          "sameAs": ["https://devcenterpoint.com"],
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://kothalipi.devcenterpoint.com/pwa-512x512.png",
+            "width": "512",
+            "height": "512"
+          },
+          "areaServed": [
+            {
+              "@type": "Country",
+              "name": "Bangladesh"
+            },
+            {
+              "@type": "AdministrativeArea",
+              "name": "West Bengal, India"
+            },
+            {
+              "@type": "AdministrativeArea",
+              "name": "Worldwide Bengali Diaspora"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://kothalipi.devcenterpoint.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is KothaLipi AI (কথালিপি এআই)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "KothaLipi AI (কথালিপি এআই) is an intelligent, all-in-one AI platform engineered specifically for the Bengali language. It unifies three core modules: 1) High-precision Document OCR for printed books and handwritten manuscripts, 2) Bangla Academy standard Writing & Grammar Assistant with bidirectional Sadhu-Cholit conversion, and 3) Regional Dialect Voice-to-Text speech transcription."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Why is it named KothaLipi (কথালিপি)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "In Bengali, 'Kotha' (কথা) signifies the spoken voice, auditory speech, and conversational dialogue, while 'Lipi' (লিপি) represents script, document typography, and manuscript writing. KothaLipi unifies both the spoken sound and the written glyph into a single cohesive Bengali AI platform."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does KothaLipi Bengali OCR handle complex conjuncts (যুক্তবর্ণ) and cursive handwriting?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "KothaLipi leverages Google Gemini multimodal vision intelligence fine-tuned for the Eastern Indic script. It accurately parses complex conjuncts (যুক্তবর্ণ যেমন ক্ষ, জ্ঞ, ষ্ণ, হ্ম), preserved matras, archaic typography, and cursive Bengali handwriting without character dropping or phonetic corruption."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the Bengali Writing Assistant convert between Sadhu (সাধু) and Cholit (চলিত) styles?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The writing assistant applies authentic Bengali morpho-syntactic rules to transform verbs and pronouns between classical Sadhu bhasha (যেমন: করিয়াছিলা, তাহাদিগের) and modern standard Cholit bhasha (যেমন: করেছিলে, তাদের), aligning with the official Bangla Academy Pramanik Banan Riti."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can KothaLipi transcribe regional Bengali audio dialects such as Sylheti and Chittagonian?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. KothaLipi incorporates acoustic dialect normalization that can transcribe spoken regional varieties (including Sylheti, Chittagonian, Noakhali, and Barisal dialects) into both verbatim phonetic text and standardized Modern Written Bengali, complete with speaker diarization."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is KothaLipi AI free, and how is personal history synchronized?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "KothaLipi AI is completely free to use. Users can sign in with their Google Account to securely sync OCR scans, writing revisions, and voice transcripts to their private Firebase Firestore cloud database across mobile and desktop devices."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "HowTo",
+          "@id": "https://kothalipi.devcenterpoint.com/#howto-ocr",
+          "name": "How to extract Bengali text from scanned documents using KothaLipi AI OCR",
+          "description": "Step-by-step instructions to convert image scans and PDFs of Bengali text into editable Unicode text.",
+          "step": [
+            {
+              "@type": "HowToStep",
+              "name": "Upload Document",
+              "text": "Upload an image (PNG, JPEG, WebP) or document scan containing printed or handwritten Bengali text."
+            },
+            {
+              "@type": "HowToStep",
+              "name": "Select Extraction Mode",
+              "text": "Choose between Structured Fields, Full Continuous Text, or Handwritten Manuscript mode."
+            },
+            {
+              "@type": "HowToStep",
+              "name": "Run Vision OCR",
+              "text": "Click 'Extract Bengali Text' to generate accurate Unicode Bengali text with ligature preservation."
+            },
+            {
+              "@type": "HowToStep",
+              "name": "Export or Send to Writer",
+              "text": "Copy to clipboard, download as text, or send directly to the Writing Assistant for grammar checking."
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/index-DDnPxRNS.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DohHpE2T.css">
+  <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
+  <body class="antialiased selection:bg-teal-500/20 selection:text-teal-800 min-h-screen">
+    <!-- Non-JavaScript Semantic Knowledge Base for Answer Engines (AEO) & Generative Search Bots (GEO) -->
+    <noscript>
+      <main style="padding: 2rem; max-width: 800px; margin: 0 auto; font-family: sans-serif; line-height: 1.6;">
+        <h1>KothaLipi AI (কথালিপি এআই) – The Bengali Voice, Vision &amp; Writing Engine</h1>
+        <p><strong>বাংলা কণ্ঠস্বর, লিপি ও শুদ্ধ লেখনী এআই</strong></p>
+        <p>Comprehensive AI suite for Bengali: High-precision Bangla OCR for scanned documents, writing &amp; proofreading assistant with Sadhu-Cholit conversion, and voice-to-text audio transcription.</p>
+        
+        <h2>Core Modules</h2>
+        <ul>
+          <li><strong>01. Vision OCR (নথি পাঠ):</strong> Extracts Unicode Bengali text from scanned books, land records, NID cards, and handwritten letters with full complex conjunct (যুক্তবর্ণ) preservation.</li>
+          <li><strong>02. Writing Studio (শুদ্ধ লেখনী):</strong> Bangla Academy standard grammar checker, spelling proofreader, and bidirectional Sadhu to Cholit (সাধু ⇄ চলিত) stylistic transformer.</li>
+          <li><strong>03. Voice to Text (কণ্ঠস্বর):</strong> Acoustic Bengali speech transcription with regional dialect normalization (Sylhet, Chittagong, Dhaka) and speaker diarization.</li>
+        </ul>
+
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <dl>
+          <dt><strong>What is KothaLipi AI?</strong></dt>
+          <dd>KothaLipi is an intelligent Bengali NLP and speech platform uniting voice-to-text transcription, document OCR, and grammar assistance.</dd>
+          <dt><strong>Does it support Sadhu-Cholit conversion?</strong></dt>
+          <dd>Yes, KothaLipi provides bidirectional conversion adhering to Bangla Academy grammatical rules.</dd>
+          <dt><strong>Are regional dialects supported?</strong></dt>
+          <dd>Yes, it supports Sylheti, Chittagonian, and other regional varieties with standard Bengali normalization.</dd>
+        </dl>
+      </main>
+    </noscript>
+
+    <div id="root"></div>
+  </body>
+</html>

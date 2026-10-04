@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <!-- DevCenterPoint Official Vector Art -->
+  <defs>
+    <linearGradient id="dcpSvgBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <radialGradient id="dcpSvgPupil" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="45%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1e40af" />
+    </radialGradient>
+  </defs>
+
+  <rect width="400" height="400" fill="#000000" rx="32" />
+
+  <!-- D Outer Shape -->
+  <g transform="translate(70, 45)">
+    <path
+      d="M20 15 H120 C180 15 220 55 220 115 C220 175 180 215 120 215 H20 V15 Z"
+      fill="#111625"
+    />
+
+    <!-- Electric Blue Arc -->
+    <path
+      d="M120 25 C170 25 208 60 208 115 C208 145 190 172 170 188 L120 115 Z"
+      fill="url(#dcpSvgBlue)"
+    />
+
+    <!-- Code glyph </ > -->
+    <g transform="translate(155, 55) scale(1.6)" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <polyline points="7,2 2,7 7,12" />
+      <polyline points="13,2 18,7 13,12" />
+    </g>
+
+    <!-- White Bezel Ring -->
+    <circle cx="120" cy="115" r="58" fill="#ffffff" />
+
+    <!-- Blue Lens -->
+    <circle cx="120" cy="115" r="37" fill="url(#dcpSvgPupil)" />
+
+    <!-- Lens Specular Highlight -->
+    <circle cx="110" cy="105" r="9" fill="#93c5fd" opacity="0.9" />
+  </g>
+
+  <!-- Wordmark -->
+  <text x="200" y="320" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="800" font-size="34" letter-spacing="-0.02em">
+    <tspan fill="#3b82f6">Dev</tspan><tspan fill="#ffffff">Center</tspan><tspan fill="#3b82f6">Point</tspan>
+  </text>
+  <text x="200" y="355" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="600" font-size="13" fill="#94a3b8" letter-spacing="0.25em">
+    CODE. BUILD. DEPLOY. SCALE.
+  </text>
+</svg>
